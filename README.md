@@ -10,34 +10,25 @@ Browser and synthetic JSON feed Python CPU retrieval and source validation. Opti
 
 합성 데이터로 기업 업무 흐름을 재현하는 엔지니어링 테스트입니다. 실제 공장·MES·OT 시스템에 연결하지 않으며, 실제 공장 ROI나 MTTR 개선 효과를 검증한 프로젝트가 아닙니다.
 
-![TRACE 현재 UI: 합성 MES 사건의 원문 인용과 규칙 기준선](docs/demo/ui-refresh/after-desktop.png)
+## 현재 화면: 사건부터 검토 기록까지
 
-현재 UI의 실제 브라우저 캡처입니다. 합성 사건 `INC-A-002`의 규칙 기준선과 원문 인용을 대조한 장면이며 이 캡처에는 모델 추론이 없습니다. Compact 역할 헤더, 왼쪽 사건 큐, 접을 수 있는 이벤트 타임라인, 원문 중심 패널과 모바일 작업 탭을 사용합니다. [변경 전후 화면·검사 기록](docs/demo/ui-refresh/README.md)을 확인할 수 있습니다.
+P09 v2 개발 화면의 밝은 회색 바탕(`#f1f4f6`), 남색 본문(`#142635`), 선택 버튼(`#173f60`), 흰 근거·결과 카드와 회색 원문 블록을 적용했습니다. 화면 위에는 한 줄 한국어 제목과 역할·사건 선택을 두고, 아래 두 열에 원문과 결과를 나란히 표시합니다. 390px에서는 작업 탭으로 이동합니다. 이 화면은 합성 사건을 실제 Chrome에서 캡처했으며 **9장 모두 규칙 기준선, 모델 요청 0회**입니다.
 
-[초기 UI의 실제 동작 영상](docs/demo/demo.mp4)은 기존 브라우저 원본 screencast 기록입니다. 규칙 분석·사람 승인·실제 모델 추출·원문 인용 확인을 기록하며, **이전 레이아웃**의 자료입니다. 실제 모델은 정형 관측 추출에 사용하고 원인 가설은 잠정 규칙 결과입니다.
+| 순서 | 실제 화면 | 확인할 기능 |
+| --- | --- | --- |
+| 1 | ![정상 주문 조회와 두 열 근거 화면](docs/demo/refit-gallery/01-normal-baseline.png) | 사건 선택 · 정상 접수 근거 |
+| 2 | ![접속 주소 오류의 원문과 분석](docs/demo/refit-gallery/02-endpoint-mismatch.png) | 설정 주소와 기준 포트 대조 |
+| 3 | ![의존 서비스 단절 분석](docs/demo/refit-gallery/03-dependency-unavailable.png) | 연결 오류와 상태 조회 분리 |
+| 4 | ![응답 지연과 반증](docs/demo/refit-gallery/04-delay-counterevidence.png) | 지연 관측과 반증 |
+| 5 | ![현재 개정 원문 인용 강조](docs/demo/refit-gallery/05-original-quote-validation.png) | 정확한 부분 문자열·개정 대조 |
+| 6 | ![검토 결정과 감사 이력](docs/demo/refit-gallery/06-review-and-audit.png) | 사람 검토 기록 · 감사 이력 |
+| 7 | ![운영 담당의 제한된 근거 범위](docs/demo/refit-gallery/07-operator-evidence-scope.png) | 역할별 근거·승인 제한 |
+| 8 | ![운영 담당의 중립 검토 표시](docs/demo/refit-gallery/08-operator-neutral-review.png) | 비공개 결정 중립 표시 |
+| 9 | ![390px 모바일 원문 작업 탭](docs/demo/refit-gallery/09-mobile-workspace.png) | 모바일 원문 · 가로 넘침 없음 |
 
+[현재 캡처 조건과 파일별 해시](docs/demo/refit-gallery/README.md). 본문·조작부는 16px, 밀집한 원문·메타데이터는 14px 이상을 목표로 합니다. 만료 세션과 실제 권한 거절을 구분하고, 키보드 사건 선택·포커스 복귀·reduced-motion 이동을 유지합니다. 이 검사는 완전한 접근성 인증이 아닙니다.
 
-## 현재 UI와 복구 흐름
-
-| 데스크톱 원문 대조 | 모바일 원문 작업 탭 |
-| --- | --- |
-| ![현재 원문 중심 데스크톱](docs/demo/ui-refresh/after-desktop.png) | ![현재 모바일 원문 탭](docs/demo/ui-refresh/after-mobile-source.png) |
-
-[만료 세션 안내](docs/demo/ui-refresh/after-expired-session.png), [모바일 사건 큐](docs/demo/ui-refresh/after-mobile-cases.png), [검토 기록](docs/demo/ui-refresh/after-reviewed-record.png), [전체 변경 전후와 검증 범위](docs/demo/ui-refresh/README.md).
-
-본문·조작부는 16px, 밀집된 관측 사실·원문·메타데이터는 14px 이상으로 표시합니다. 403에서 인증이 만료됐는지 읽기 전용으로 확인하고, 실제 권한 거절이면 세션을 유지합니다. Reduced-motion 인용 이동과 포커스 복귀를 지원합니다. 대비·키보드·모바일 회귀는 제한된 자동 검사이며 완전한 접근성 준수 검증은 아닙니다.
-
-## 초기 UI 실제 동작 화면 10개
-
-정상·주소 오류·의존 서비스 단절·지연, 원문 인용, 검토·감사, 운영자 접근 범위와 중립 표시, 모바일, 실제 모델 추출을 각각 캡처했습니다. [전체 설명과 실제 캡처 기록](docs/demo/gallery/README.md).
-
-| 업무 화면 | 업무 화면 |
-| --- | --- |
-| ![정상 주문 조회](docs/demo/gallery/01-normal-baseline.png) | ![접속 주소 오류](docs/demo/gallery/02-endpoint-mismatch.png) |
-| ![의존 서비스 비활성](docs/demo/gallery/03-dependency-unavailable.png) | ![응답 지연과 반증](docs/demo/gallery/04-delay-counterevidence.png) |
-| ![원문 인용 강조](docs/demo/gallery/05-original-quote-validation.png) | ![사람 검토와 감사](docs/demo/gallery/06-review-and-audit.png) |
-| ![운영자 접근 범위](docs/demo/gallery/07-operator-evidence-scope.png) | ![비공개 결정의 중립 표시](docs/demo/gallery/08-operator-neutral-review.png) |
-| ![모바일 작업 화면](docs/demo/gallery/09-mobile-workspace.png) | ![실제 모델 관측 추출](docs/demo/gallery/10-real-model-extraction.png) |
+이전 레이아웃의 [UI 변경 전후](docs/demo/ui-refresh/README.md), [초기 10장 갤러리](docs/demo/gallery/README.md), [실제 동작 영상](docs/demo/demo.mp4)은 **역사적 자료**로 남겨 둡니다. 초기 영상과 10번째 갤러리 사진에는 당시 실제 모델 추출이 포함되지만 현재 디자인을 보여주지 않습니다. 실제 모델은 정형 관측 추출에 사용하며 원인 가설은 잠정 규칙 결과입니다.
 
 ## 누구를 위한 프로젝트인가
 

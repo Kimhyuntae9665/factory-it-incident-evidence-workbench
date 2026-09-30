@@ -1,0 +1,88 @@
+{
+  "phase": "after",
+  "actual_browser": true,
+  "synthetic": true,
+  "model_requests": 0,
+  "checks": [
+    "desktop native Tab reaches second incident queue row",
+    "desktop native Enter loads intended incident and accessible source",
+    "desktop selection preserves authenticated profile",
+    "desktop completed selection restores exact selected queue row",
+    "capture excludes authentication/private path",
+    "desktop next native Tab continues queue position",
+    "mobile native Enter opens incident queue task",
+    "mobile native Tab reaches second incident queue row",
+    "mobile native Enter loads intended incident and accessible source",
+    "mobile selection preserves authenticated profile",
+    "mobile completed selection focuses visible incident heading in source task",
+    "mobile focused incident heading is visible in viewport",
+    "capture excludes authentication/private path",
+    "mobile ShiftTab reaches active task control from incident heading",
+    "mobile native ArrowLeft returns to incident queue task",
+    "mobile native Tab returns to exact selected incident row",
+    "mobile next native Tab continues queue position",
+    "native mobile390 has no auto-shrink/page overflow",
+    "delayed real queue read does not steal a later explicit focus/task choice"
+  ],
+  "cases": [
+    {
+      "layout": "desktop",
+      "observed": {
+        "tag": "BUTTON",
+        "id": "",
+        "class": "incident-card selected",
+        "old_origin_connected": false
+      },
+      "passed": true
+    },
+    {
+      "layout": "mobile",
+      "observed": {
+        "tag": "H2",
+        "id": "incident-title",
+        "class": "",
+        "old_origin_connected": false
+      },
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "desktop-queue-selection.png",
+      "sha256": "efe08584023e725619127ff92f2f29c68250b6e79b14c4d3381132444e8f9b3e",
+      "actual_ui": true,
+      "incident": "INC-A-002",
+      "principal": "사이트 A / 검토자",
+      "css_width": 1440,
+      "scale": 1,
+      "overflow": false,
+      "task": "sources",
+      "focus": {
+        "id": "",
+        "tag": "BUTTON",
+        "class": "incident-card selected",
+        "queue_id": "INC-A-002"
+      },
+      "old_origin_connected": false
+    },
+    {
+      "file": "mobile-queue-selection.png",
+      "sha256": "ca2c3f901b50981bde7173b4f7c8d85f274430889fad17a1bda912c14899fbe0",
+      "actual_ui": true,
+      "incident": "INC-A-002",
+      "principal": "사이트 A / 검토자",
+      "css_width": 390,
+      "scale": 1,
+      "overflow": false,
+      "task": "sources",
+      "focus": {
+        "id": "incident-title",
+        "tag": "H2",
+        "class": "",
+        "queue_id": null
+      },
+      "old_origin_connected": false
+    }
+  ],
+  "passed": true
+}
