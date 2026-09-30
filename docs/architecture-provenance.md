@@ -2,7 +2,7 @@
 
 Browser requests the loopback Python API; current JSON evidence is selected after latest revision/site-role checks. Default CPU retrieval is token_overlap. Optional Ollama/Qwen extraction is source-validated and CPU rules construct provisional hypotheses. Reviewer decisions and audits are stored in SQLite. No vector database, embedding model or active n8n exists.
 
-PNG is the inline README asset; SVG is the editable, fully embedded source. Six compact cards use actual technology glyphs where available. JSON braces are a locally authored functional symbol. Browser contains the JavaScript glyph for the vanilla client. The undirected Ollama/Qwen link denotes runtime/model association; dashed arrows are optional requests and returned proposals, not parallel GPU workers. The solid Python/SQLite arrow denotes server-owned persistence after human review.
+PNG is the inline README asset; SVG is the editable, fully embedded source. Six compact cards use actual technology glyphs where available. JSON braces are a locally authored functional symbol. Browser contains the JavaScript glyph for the vanilla client. The undirected Ollama/Qwen link denotes runtime/model association; dashed arrows are optional requests and returned proposals, not parallel GPU workers. The solid Python/SQLite arrow denotes server-owned record persistence, including subsequent review and audit records.
 
 Inspected source commit: 8422c5c6b4aa787d13386f0e6f70b97c3da2c244. Diagram generation does not rerun a model or change benchmark results. Final PNG pixels and an actual 360px-wide CPU browser capture were visually inspected; technology labels are 28px in the 720px source (14px at 360px display).
 
@@ -24,3 +24,5 @@ Reference style: user-supplied synthetic-logo-rendering-compatibility-test.png, 
 - workbench/rules.py SHA256 b39c24e8ea5a491efa1cf65a74413cf111d8677e04984fc8b4718fb5c36afd34
 - workbench/llm.py SHA256 8d3ae8ae4c248809fee24d634fdf17ed59c8060cd5e239f6577199f44145b49e
 - workbench/server.py SHA256 55980a38e0eff006a453772b546824f07d73ca212764f4ebacda4f62df7faed7
+
+Logo geometry: each downloaded glyph has viewBox 0 0 24 24. The embedded path uses one uniform scale in both axes, fitted to a 68x68 box and centered in its card. SQLite retains the feather proportions; no nested SVG sizing or anisotropic scaling is used. The JavaScript glyph is uniformly fitted to its separate yellow browser tile.
