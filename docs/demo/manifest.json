@@ -1,0 +1,30 @@
+{
+  "synthetic": true,
+  "capture": "actual browser screencast; unretouched screen frames",
+  "recorded_at_utc": "2026-09-30T08:02:30Z",
+  "duration_seconds": 6.68,
+  "original_frame_count": 312,
+  "flow": [
+    "baseline analysis",
+    "human approval of baseline",
+    "actual local model typed extraction",
+    "revision-2 source quote highlight"
+  ],
+  "runtime_ranker_at_recording": "char3_plus_code",
+  "current_default_ranker": "token_overlap; subsequently verified 4 actual fixed cases",
+  "actual_user_credentials_visible": false,
+  "files": {
+    "demo.mp4": {
+      "sha256": "c70f9c9e9d16dd8f4afa5428044813e48420468bf01e5acd1253079c908dba15",
+      "bytes": 372569
+    },
+    "mobile.png": {
+      "sha256": "f511926098af74d8f815edafd6428bcd0df19c794c102c504a3c0df63052f115",
+      "bytes": 60560
+    },
+    "desktop.png": {
+      "sha256": "0965ea1da91c512c363a0220da391d6bf0968f11913875415bd30c364679178a",
+      "bytes": 177638
+    }
+  }
+}

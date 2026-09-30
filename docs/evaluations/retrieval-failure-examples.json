@@ -1,0 +1,708 @@
+[
+  {
+    "case": {
+      "id": "technical-002",
+      "category": "log_config_health_coverage",
+      "profile": "B-it",
+      "incident_id": "INC-B-002",
+      "query": "INV_CONNECT mes-orders inventory.endpoint expected_port timeout_ms inventory process status health duration_ms",
+      "required_spans": [
+        {
+          "logical_id": "INC-B-002-log",
+          "quote": "code=INV_CONNECT"
+        },
+        {
+          "logical_id": "INC-B-002-log",
+          "quote": "duration_ms="
+        },
+        {
+          "logical_id": "INC-B-002-config",
+          "quote": "expected_port=19082"
+        },
+        {
+          "logical_id": "INC-B-002-config",
+          "quote": "timeout_ms=120"
+        },
+        {
+          "logical_id": "INC-B-002-health",
+          "quote": "inventory process status=active"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "case_id": "technical-002",
+        "category": "log_config_health_coverage",
+        "method": "token_overlap",
+        "k": 3,
+        "content_bytes": 396,
+        "ranking_ms_median": 0.19603478722274303,
+        "candidate_count": 6,
+        "selected_ids": [
+          "INC-B-002-ticket-r2",
+          "INC-B-002-config-r2",
+          "INC-B-002-log-r2"
+        ],
+        "ranked_ids": [
+          "INC-B-002-ticket-r2",
+          "INC-B-002-config-r2",
+          "INC-B-002-log-r2",
+          "RUN-B-r2",
+          "INC-B-002-health-r2",
+          "UNTRUSTED-B-r1"
+        ],
+        "ranked_documents": [
+          {
+            "document_id": "INC-B-002-ticket-r2",
+            "rank": 1,
+            "score": 0.815385,
+            "full_precision_score": 0.8153846153846154,
+            "components": {
+              "token_overlap": 0.6153846153846154,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "INC-B-002-config-r2",
+            "rank": 2,
+            "score": 0.392308,
+            "full_precision_score": 0.39230769230769236,
+            "components": {
+              "token_overlap": 0.19230769230769232,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "INC-B-002-log-r2",
+            "rank": 3,
+            "score": 0.392308,
+            "full_precision_score": 0.39230769230769236,
+            "components": {
+              "token_overlap": 0.19230769230769232,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "RUN-B-r2",
+            "rank": 4,
+            "score": 0.384615,
+            "full_precision_score": 0.38461538461538464,
+            "components": {
+              "token_overlap": 0.38461538461538464,
+              "same_case_prior": 0,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "INC-B-002-health-r2",
+            "rank": 5,
+            "score": 0.353846,
+            "full_precision_score": 0.35384615384615387,
+            "components": {
+              "token_overlap": 0.15384615384615385,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "UNTRUSTED-B-r1",
+            "rank": 6,
+            "score": 0.2,
+            "full_precision_score": 0.2,
+            "components": {
+              "token_overlap": 0.0,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          }
+        ],
+        "document_recall": 0.6666666666666666,
+        "span_recall": 0.8,
+        "all_required_spans": false,
+        "mrr": 0.5,
+        "missing_spans": [
+          {
+            "logical_id": "INC-B-002-health",
+            "quote": "inventory process status=active"
+          }
+        ]
+      },
+      {
+        "case_id": "technical-002",
+        "category": "log_config_health_coverage",
+        "method": "char3_plus_code",
+        "k": 3,
+        "content_bytes": 595,
+        "ranking_ms_median": 1.409725984558463,
+        "candidate_count": 6,
+        "selected_ids": [
+          "INC-B-002-ticket-r2",
+          "INC-B-002-log-r2",
+          "RUN-B-r2"
+        ],
+        "ranked_ids": [
+          "INC-B-002-ticket-r2",
+          "INC-B-002-log-r2",
+          "RUN-B-r2",
+          "INC-B-002-config-r2",
+          "INC-B-002-health-r2",
+          "UNTRUSTED-B-r1"
+        ],
+        "ranked_documents": [
+          {
+            "document_id": "INC-B-002-ticket-r2",
+            "rank": 1,
+            "score": 4.402618,
+            "full_precision_score": 4.402617972649726,
+            "components": {
+              "token_overlap": 0.6153846153846154,
+              "same_case_prior": 0.2,
+              "code_boost": 3,
+              "char3_cosine": 0.587233357265111
+            }
+          },
+          {
+            "document_id": "INC-B-002-log-r2",
+            "rank": 2,
+            "score": 3.879307,
+            "full_precision_score": 3.8793066351910945,
+            "components": {
+              "token_overlap": 0.19230769230769232,
+              "same_case_prior": 0.2,
+              "code_boost": 3,
+              "char3_cosine": 0.4869989428834024
+            }
+          },
+          {
+            "document_id": "RUN-B-r2",
+            "rank": 3,
+            "score": 3.851604,
+            "full_precision_score": 3.851603901399359,
+            "components": {
+              "token_overlap": 0.38461538461538464,
+              "same_case_prior": 0,
+              "code_boost": 3,
+              "char3_cosine": 0.46698851678397435
+            }
+          },
+          {
+            "document_id": "INC-B-002-config-r2",
+            "rank": 4,
+            "score": 0.805859,
+            "full_precision_score": 0.8058589316316322,
+            "components": {
+              "token_overlap": 0.19230769230769232,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0.41355123932393995
+            }
+          },
+          {
+            "document_id": "INC-B-002-health-r2",
+            "rank": 5,
+            "score": 0.590794,
+            "full_precision_score": 0.5907943516382843,
+            "components": {
+              "token_overlap": 0.15384615384615385,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0.23694819779213042
+            }
+          },
+          {
+            "document_id": "UNTRUSTED-B-r1",
+            "rank": 6,
+            "score": 0.296367,
+            "full_precision_score": 0.2963671044833717,
+            "components": {
+              "token_overlap": 0.0,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0.0963671044833717
+            }
+          }
+        ],
+        "document_recall": 0.3333333333333333,
+        "span_recall": 0.4,
+        "all_required_spans": false,
+        "mrr": 0.5,
+        "missing_spans": [
+          {
+            "logical_id": "INC-B-002-config",
+            "quote": "expected_port=19082"
+          },
+          {
+            "logical_id": "INC-B-002-config",
+            "quote": "timeout_ms=120"
+          },
+          {
+            "logical_id": "INC-B-002-health",
+            "quote": "inventory process status=active"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "case": {
+      "id": "korean-004",
+      "category": "korean_paraphrase",
+      "profile": "B-it",
+      "incident_id": "INC-B-004",
+      "query": "주문 조회가 오래 걸려 제한 시간에 걸렸어요. 처리 시간과 시간 제한, 서비스 상태를 확인해 주세요.",
+      "required_spans": [
+        {
+          "logical_id": "INC-B-004-log",
+          "quote": "code=INV_TIMEOUT"
+        },
+        {
+          "logical_id": "INC-B-004-log",
+          "quote": "duration_ms="
+        },
+        {
+          "logical_id": "INC-B-004-config",
+          "quote": "expected_port=19082"
+        },
+        {
+          "logical_id": "INC-B-004-config",
+          "quote": "timeout_ms=120"
+        },
+        {
+          "logical_id": "INC-B-004-health",
+          "quote": "inventory process status=active"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "case_id": "korean-004",
+        "category": "korean_paraphrase",
+        "method": "token_overlap",
+        "k": 3,
+        "content_bytes": 405,
+        "ranking_ms_median": 0.08585210889577866,
+        "candidate_count": 5,
+        "selected_ids": [
+          "INC-B-004-ticket-r2",
+          "INC-B-004-log-r2",
+          "INC-B-004-config-r2"
+        ],
+        "ranked_ids": [
+          "INC-B-004-ticket-r2",
+          "INC-B-004-log-r2",
+          "INC-B-004-config-r2",
+          "INC-B-004-health-r2",
+          "RUN-B-r2"
+        ],
+        "ranked_documents": [
+          {
+            "document_id": "INC-B-004-ticket-r2",
+            "rank": 1,
+            "score": 0.7,
+            "full_precision_score": 0.7,
+            "components": {
+              "token_overlap": 0.5,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "INC-B-004-log-r2",
+            "rank": 2,
+            "score": 0.29375,
+            "full_precision_score": 0.29375,
+            "components": {
+              "token_overlap": 0.09375,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "INC-B-004-config-r2",
+            "rank": 3,
+            "score": 0.23125,
+            "full_precision_score": 0.23125,
+            "components": {
+              "token_overlap": 0.03125,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "INC-B-004-health-r2",
+            "rank": 4,
+            "score": 0.2,
+            "full_precision_score": 0.2,
+            "components": {
+              "token_overlap": 0.0,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "RUN-B-r2",
+            "rank": 5,
+            "score": 0.0625,
+            "full_precision_score": 0.0625,
+            "components": {
+              "token_overlap": 0.0625,
+              "same_case_prior": 0,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          }
+        ],
+        "document_recall": 0.6666666666666666,
+        "span_recall": 0.8,
+        "all_required_spans": false,
+        "mrr": 0.5,
+        "missing_spans": [
+          {
+            "logical_id": "INC-B-004-health",
+            "quote": "inventory process status=active"
+          }
+        ]
+      },
+      {
+        "case_id": "korean-004",
+        "category": "korean_paraphrase",
+        "method": "char3_plus_code",
+        "k": 3,
+        "content_bytes": 604,
+        "ranking_ms_median": 0.5593139212578535,
+        "candidate_count": 5,
+        "selected_ids": [
+          "INC-B-004-ticket-r2",
+          "INC-B-004-log-r2",
+          "RUN-B-r2"
+        ],
+        "ranked_ids": [
+          "INC-B-004-ticket-r2",
+          "INC-B-004-log-r2",
+          "RUN-B-r2",
+          "INC-B-004-config-r2",
+          "INC-B-004-health-r2"
+        ],
+        "ranked_documents": [
+          {
+            "document_id": "INC-B-004-ticket-r2",
+            "rank": 1,
+            "score": 4.375725,
+            "full_precision_score": 4.375724628517347,
+            "components": {
+              "token_overlap": 0.5,
+              "same_case_prior": 0.2,
+              "code_boost": 3,
+              "char3_cosine": 0.6757246285173463
+            }
+          },
+          {
+            "document_id": "INC-B-004-log-r2",
+            "rank": 2,
+            "score": 3.449482,
+            "full_precision_score": 3.449481711384032,
+            "components": {
+              "token_overlap": 0.09375,
+              "same_case_prior": 0.2,
+              "code_boost": 3,
+              "char3_cosine": 0.15573171138403175
+            }
+          },
+          {
+            "document_id": "RUN-B-r2",
+            "rank": 3,
+            "score": 3.188192,
+            "full_precision_score": 3.1881920389881055,
+            "components": {
+              "token_overlap": 0.0625,
+              "same_case_prior": 0,
+              "code_boost": 3,
+              "char3_cosine": 0.12569203898810538
+            }
+          },
+          {
+            "document_id": "INC-B-004-config-r2",
+            "rank": 4,
+            "score": 0.301315,
+            "full_precision_score": 0.30131490497453706,
+            "components": {
+              "token_overlap": 0.03125,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0.07006490497453706
+            }
+          },
+          {
+            "document_id": "INC-B-004-health-r2",
+            "rank": 5,
+            "score": 0.206742,
+            "full_precision_score": 0.20674199862463244,
+            "components": {
+              "token_overlap": 0.0,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0.006741998624632421
+            }
+          }
+        ],
+        "document_recall": 0.3333333333333333,
+        "span_recall": 0.4,
+        "all_required_spans": false,
+        "mrr": 0.5,
+        "missing_spans": [
+          {
+            "logical_id": "INC-B-004-config",
+            "quote": "expected_port=19082"
+          },
+          {
+            "logical_id": "INC-B-004-config",
+            "quote": "timeout_ms=120"
+          },
+          {
+            "logical_id": "INC-B-004-health",
+            "quote": "inventory process status=active"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "case": {
+      "id": "exact-id-config",
+      "category": "exact_id",
+      "profile": "B-it",
+      "incident_id": "INC-B-002",
+      "query": "INC-B-002-config-r2",
+      "required_spans": [
+        {
+          "logical_id": "INC-B-002-config",
+          "document_id": "INC-B-002-config-r2",
+          "quote": "expected_port=19082"
+        }
+      ]
+    },
+    "methods": [
+      {
+        "case_id": "exact-id-config",
+        "category": "exact_id",
+        "method": "token_overlap",
+        "k": 3,
+        "content_bytes": 396,
+        "ranking_ms_median": 0.1009330153465271,
+        "candidate_count": 6,
+        "selected_ids": [
+          "INC-B-002-ticket-r2",
+          "INC-B-002-log-r2",
+          "INC-B-002-config-r2"
+        ],
+        "ranked_ids": [
+          "INC-B-002-ticket-r2",
+          "INC-B-002-log-r2",
+          "INC-B-002-config-r2",
+          "INC-B-002-health-r2",
+          "UNTRUSTED-B-r1",
+          "RUN-B-r2"
+        ],
+        "ranked_documents": [
+          {
+            "document_id": "INC-B-002-ticket-r2",
+            "rank": 1,
+            "score": 1.042105,
+            "full_precision_score": 1.0421052631578946,
+            "components": {
+              "token_overlap": 0.8421052631578947,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "INC-B-002-log-r2",
+            "rank": 2,
+            "score": 0.357895,
+            "full_precision_score": 0.35789473684210527,
+            "components": {
+              "token_overlap": 0.15789473684210525,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "INC-B-002-config-r2",
+            "rank": 3,
+            "score": 0.252632,
+            "full_precision_score": 0.25263157894736843,
+            "components": {
+              "token_overlap": 0.05263157894736842,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "INC-B-002-health-r2",
+            "rank": 4,
+            "score": 0.2,
+            "full_precision_score": 0.2,
+            "components": {
+              "token_overlap": 0.0,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "UNTRUSTED-B-r1",
+            "rank": 5,
+            "score": 0.2,
+            "full_precision_score": 0.2,
+            "components": {
+              "token_overlap": 0.0,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          },
+          {
+            "document_id": "RUN-B-r2",
+            "rank": 6,
+            "score": 0.105263,
+            "full_precision_score": 0.10526315789473684,
+            "components": {
+              "token_overlap": 0.10526315789473684,
+              "same_case_prior": 0,
+              "code_boost": 0,
+              "char3_cosine": 0
+            }
+          }
+        ],
+        "document_recall": 1.0,
+        "span_recall": 1.0,
+        "all_required_spans": true,
+        "mrr": 0.3333333333333333,
+        "missing_spans": []
+      },
+      {
+        "case_id": "exact-id-config",
+        "category": "exact_id",
+        "method": "char3_plus_code",
+        "k": 3,
+        "content_bytes": 595,
+        "ranking_ms_median": 0.6197958718985319,
+        "candidate_count": 6,
+        "selected_ids": [
+          "INC-B-002-ticket-r2",
+          "INC-B-002-log-r2",
+          "RUN-B-r2"
+        ],
+        "ranked_ids": [
+          "INC-B-002-ticket-r2",
+          "INC-B-002-log-r2",
+          "RUN-B-r2",
+          "INC-B-002-config-r2",
+          "UNTRUSTED-B-r1",
+          "INC-B-002-health-r2"
+        ],
+        "ranked_documents": [
+          {
+            "document_id": "INC-B-002-ticket-r2",
+            "rank": 1,
+            "score": 4.800039,
+            "full_precision_score": 4.800039420971186,
+            "components": {
+              "token_overlap": 0.8421052631578947,
+              "same_case_prior": 0.2,
+              "code_boost": 3,
+              "char3_cosine": 0.7579341578132911
+            }
+          },
+          {
+            "document_id": "INC-B-002-log-r2",
+            "rank": 2,
+            "score": 3.579297,
+            "full_precision_score": 3.5792969550397236,
+            "components": {
+              "token_overlap": 0.15789473684210525,
+              "same_case_prior": 0.2,
+              "code_boost": 3,
+              "char3_cosine": 0.22140221819761816
+            }
+          },
+          {
+            "document_id": "RUN-B-r2",
+            "rank": 3,
+            "score": 3.258565,
+            "full_precision_score": 3.258565160485815,
+            "components": {
+              "token_overlap": 0.10526315789473684,
+              "same_case_prior": 0,
+              "code_boost": 3,
+              "char3_cosine": 0.15330200259107793
+            }
+          },
+          {
+            "document_id": "INC-B-002-config-r2",
+            "rank": 4,
+            "score": 0.347693,
+            "full_precision_score": 0.34769258290528837,
+            "components": {
+              "token_overlap": 0.05263157894736842,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0.09506100395791997
+            }
+          },
+          {
+            "document_id": "UNTRUSTED-B-r1",
+            "rank": 5,
+            "score": 0.21373,
+            "full_precision_score": 0.21373022876090383,
+            "components": {
+              "token_overlap": 0.0,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0.013730228760903834
+            }
+          },
+          {
+            "document_id": "INC-B-002-health-r2",
+            "rank": 6,
+            "score": 0.207427,
+            "full_precision_score": 0.20742719888777883,
+            "components": {
+              "token_overlap": 0.0,
+              "same_case_prior": 0.2,
+              "code_boost": 0,
+              "char3_cosine": 0.007427198887778832
+            }
+          }
+        ],
+        "document_recall": 0.0,
+        "span_recall": 0.0,
+        "all_required_spans": false,
+        "mrr": 0.25,
+        "missing_spans": [
+          {
+            "logical_id": "INC-B-002-config",
+            "document_id": "INC-B-002-config-r2",
+            "quote": "expected_port=19082"
+          }
+        ]
+      }
+    ]
+  }
+]

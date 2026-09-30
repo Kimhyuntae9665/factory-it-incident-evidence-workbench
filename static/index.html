@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>TRACE · 장애 근거 워크벤치</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">작업 화면으로 이동</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="세션과 사건 목록">
+      <a class="brand" href="/" aria-label="TRACE 장애 근거 워크벤치">
+        <span class="brand-mark" aria-hidden="true">T<span></span></span>
+        <span>TRACE<small>INCIDENT EVIDENCE</small></span>
+      </a>
+      <div class="sidebar-rule"></div>
+      <div class="section-kicker">WORKSPACE / DEMO</div>
+      <section class="session-panel" aria-labelledby="session-heading">
+        <h2 id="session-heading">데모 접근 프로필</h2>
+        <p class="small muted">사이트와 역할에 따라 공개되는 근거가 달라집니다.</p>
+        <label class="sr-only" for="profile-select">데모 접근 프로필</label>
+        <select id="profile-select"><option value="">프로필 불러오는 중…</option></select>
+        <button id="session-button" class="button session-button" type="button">세션 시작</button>
+        <div id="principal" class="principal"><span class="status-dot"></span><span>연결된 세션 없음</span></div>
+        <p id="role-help" class="tiny muted">데모 로그인 · 기업 인증을 대체하지 않습니다.</p>
+      </section>
+      <div class="list-heading"><h2>사건 목록</h2><span id="incident-count" class="count">0</span></div>
+      <nav id="incident-list" class="incident-list" aria-label="사건 선택"><p class="empty-side">프로필을 선택하고<br>세션을 시작해 주세요.</p></nav>
+      <div class="sidebar-footer"><span class="status-dot" id="health-dot"></span><span id="health-text">워크벤치 연결 확인 중</span><span class="tiny">LOCAL / SYNTHETIC</span></div>
+    </aside>
+
+    <main id="workspace" class="workspace" tabindex="-1">
+      <div class="test-notice"><span class="test-chip">REPRODUCTION TEST</span><p>합성 데이터 기반 기업 업무 재현 테스트 <span>실제 공장 성과·ROI·MTTR 검증 자료가 아닙니다.</span></p></div>
+      <header class="workspace-top"><div><span class="section-kicker">FACTORY IT / EVIDENCE WORKBENCH</span><h1>장애를 읽고, 근거를 연결하다.</h1><p class="muted">사실과 가설을 구분하고 검토자의 판단을 기록하는 작업 공간</p></div><div class="workspace-id"><span class="status-dot"></span>근거 중심 검토<span>TRACE / 01</span></div></header>
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+      <section id="welcome" class="welcome-panel">
+        <div class="welcome-graphic" aria-hidden="true"><span>01</span><i></i><span>02</span><i></i><span>03</span></div>
+        <span class="section-kicker">FROM SIGNAL TO REVIEW</span>
+        <h2>사건 하나부터 시작하세요.</h2>
+        <p>접근 프로필을 고르면 해당 사이트의 사건을 확인할 수 있습니다.<br>원문과 개정 정보를 읽고, 분석의 인용을 대조한 뒤 검토를 남기세요.</p>
+        <div class="welcome-steps"><div><b>01 / 근거 확인</b><p>현재 접근 가능한 최신 개정 원문</p></div><div><b>02 / 분석 대조</b><p>사실 · 가설 · 반증 · 미확인 사항</p></div><div><b>03 / 검토 기록</b><p>근거 검증과 승인·반려 이력</p></div></div>
+      </section>
+
+      <div id="incident-workspace" hidden>
+        <section class="incident-heading">
+          <div><div class="incident-eyebrow"><span id="incident-id" class="mono"></span><span id="incident-site" class="badge"></span><span id="incident-status" class="badge"></span></div><h2 id="incident-title"></h2><p id="incident-ticket" class="ticket"></p></div>
+          <dl class="incident-meta"><div><dt>서비스</dt><dd id="incident-service"></dd></div><div><dt>발생 시각</dt><dd id="incident-time"></dd></div></dl>
+        </section>
+        <div class="workflow-strip" aria-label="검토 흐름"><span><b>01</b> 원문 확인</span><i aria-hidden="true"></i><span><b>02</b> 분석 · 근거 대조</span><i aria-hidden="true"></i><span><b>03</b> 검토 결정</span></div>
+
+        <div class="workbench-grid">
+          <section class="evidence-pane panel" aria-labelledby="evidence-heading">
+            <div class="panel-heading"><div><span class="section-kicker">SOURCE MATERIAL</span><h3 id="evidence-heading">근거 원문 <span id="evidence-count" class="count">0</span></h3></div><span class="tiny muted">최신 개정 · 접근 범위 내</span></div>
+            <form id="search-form" class="search-form"><label class="sr-only" for="evidence-search">근거 검색어</label><input id="evidence-search" placeholder="오류 코드, 서비스, 키워드로 검색" type="search" maxlength="500"><button id="search-button" class="icon-button" type="submit" aria-label="근거 검색">검색</button></form>
+            <div id="evidence-list" class="evidence-list"></div>
+            <article id="document-view" class="document-view" aria-labelledby="document-title" hidden><div class="document-top"><span id="document-kind" class="section-kicker"></span><span id="document-revision" class="badge"></span></div><h4 id="document-title"></h4><div id="document-badges" class="badge-row"></div><div id="citation-check" class="citation-check" role="status" hidden></div><pre id="document-content" class="document-content"></pre><div id="document-ref" class="document-ref mono"></div></article>
+            <div id="document-empty" class="pane-empty"><span class="empty-icon" aria-hidden="true">⌁</span><p>근거를 선택하면 원문과 개정 정보를 확인할 수 있습니다.</p></div>
+            <div class="timeline-block"><div class="subheading"><h4>사건 타임라인</h4><span class="tiny muted">기록된 이벤트</span></div><ol id="timeline" class="timeline"></ol></div>
+          </section>
+
+          <section class="analysis-pane panel" aria-labelledby="analysis-heading">
+            <div class="panel-heading"><div><span class="section-kicker">STRUCTURED REASONING</span><h3 id="analysis-heading">근거 기반 분석</h3></div><span id="analysis-mode-badge" class="badge">분석 대기</span></div>
+            <form id="analysis-form">
+              <fieldset class="mode-choice"><legend class="sr-only">분석 방식 선택</legend><label><input type="radio" name="mode" value="baseline" checked><span><b>규칙 기준선</b><small>모델 추론 없음</small></span></label><label><input type="radio" name="mode" value="model"><span><b>실제 모델</b><small>로컬 Ollama 추론</small></span></label></fieldset>
+              <label class="input-label" for="analysis-question">확인할 질문 <span class="muted">선택 사항</span></label>
+              <textarea id="analysis-question" rows="2" maxlength="2000" placeholder="예: 장애 원인 가설과 이를 반박하는 근거는 무엇인가요?"></textarea>
+              <div class="analysis-action"><p id="mode-description" class="tiny muted">규칙 기반 결과는 실제 모델 추론 결과와 별도로 표시합니다.</p><button id="analyze-button" class="button primary" type="submit"><span>분석 실행</span><span aria-hidden="true">↗</span></button></div>
+            </form>
+            <div id="analysis-loading" class="analysis-loading" role="status" hidden><span class="spinner" aria-hidden="true"></span><div><b>근거를 분석하고 있습니다.</b><p>완료 후 인용 검증 결과를 확인하세요. 중복 실행은 차단됩니다.</p></div></div>
+            <div id="analysis-empty" class="analysis-empty"><span class="section-kicker">READY FOR ANALYSIS</span><h4>결론보다 근거를 먼저.</h4><p>분석을 실행하면 사실, 가설, 반증, 미확인 사항이 분리되어 나타납니다. 결과의 인용을 눌러 원문과 대조하세요.</p></div>
+            <div id="analysis-result" hidden>
+              <div class="analysis-summary"><div class="summary-heading"><span class="section-kicker">ANALYSIS SUMMARY</span><span id="analysis-status" class="badge"></span></div><p id="analysis-summary"></p><div id="analysis-meta" class="tiny muted mono"></div></div>
+              <div id="gate" class="gate"><div class="gate-heading"><span id="gate-symbol" aria-hidden="true"></span><b id="gate-title"></b></div><ul id="gate-issues"></ul></div>
+              <div class="reasoning-sections"><section><div class="reasoning-title"><span class="category-marker fact"></span><h4>확인된 사실</h4><span id="facts-count" class="count">0</span></div><div id="facts"></div></section><section><div class="reasoning-title"><span class="category-marker hypothesis"></span><h4>가설 <small>확정되지 않음</small></h4><span id="hypotheses-count" class="count">0</span></div><div id="hypotheses"></div></section><section><div class="reasoning-title"><span class="category-marker counter"></span><h4>반증 근거</h4><span id="counterevidence-count" class="count">0</span></div><div id="counterevidence"></div></section><section><div class="reasoning-title"><span class="category-marker unknown"></span><h4>미확인 사항</h4><span id="unknowns-count" class="count">0</span></div><div id="unknowns"></div></section></div>
+              <section class="citations-block"><div class="subheading"><h4>인용과 출처</h4><span class="tiny muted">인용 선택 → 원문 대조</span></div><div id="citations"></div></section>
+              <section class="review-block" aria-labelledby="review-heading"><div class="subheading"><h4 id="review-heading">검토 결정</h4><span id="review-role" class="badge"></span></div><p id="review-explanation" class="small muted"></p><div id="review-existing" class="review-existing" hidden></div><form id="review-form"><label class="input-label" for="review-comment">검토 의견</label><textarea id="review-comment" rows="2" maxlength="2000" placeholder="판단 근거 또는 추가 확인이 필요한 내용을 기록하세요."></textarea><div class="review-actions"><button id="reject-button" class="button secondary" type="button">반려</button><button id="approve-button" class="button primary" type="submit">승인 기록</button></div></form></section>
+            </div>
+          </section>
+        </div>
+        <section class="audit-panel panel"><div class="panel-heading"><div><span class="section-kicker">TRACEABLE DECISIONS</span><h3>감사 이력 <span id="audit-count" class="count">0</span></h3></div><button id="audit-refresh" class="text-button" type="button">이력 새로고침 ↻</button></div><div id="audit-list" class="audit-list"></div></section>
+      </div>
+      <footer class="workspace-footer"><span>TRACE · Incident Evidence Workbench</span><span>합성 데이터 · 사이트/역할 접근 제어 · 검토 이력</span></footer>
+    </main>
+  </div>
+</body>
+</html>

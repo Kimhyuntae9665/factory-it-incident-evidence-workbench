@@ -1,0 +1,1480 @@
+{
+  "synthetic": true,
+  "split": "fixed_synthetic_regression_previously_observed_not_independent_generalization",
+  "corpus_sha256": "62f7f56e1d7e2e08835dbf1402a21d31d24fb23350dfb24b53e2f5b5faf16970",
+  "baseline_passed": 4,
+  "model_extraction_passed": 4,
+  "causal_labels_origin": "deterministic_provisional_rules",
+  "independent_model_diagnosis_validated": false,
+  "total": 4,
+  "results": [
+    {
+      "incident_id": "INC-B-001",
+      "expected_category": "normal",
+      "baseline": {
+        "passed": true,
+        "category_correct": true,
+        "analysis": {
+          "summary": "정상 주문 조회의 관측 근거를 정리했습니다. 사람의 검토가 필요합니다.",
+          "facts": [
+            {
+              "text": "MES 주문 조회 코드: ORDER_OK (code)",
+              "source_ids": [
+                "INC-B-001-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.code",
+                "value": "ORDER_OK",
+                "unit": "code",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-log-r2",
+                "revision": 2,
+                "quote": "code=ORDER_OK"
+              }
+            },
+            {
+              "text": "MES 응답 상태: 200 (http_status)",
+              "source_ids": [
+                "INC-B-001-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.http_status",
+                "value": 200,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-log-r2",
+                "revision": 2,
+                "quote": "http_status=200"
+              }
+            },
+            {
+              "text": "MES 관측 응답 시간: 0.97 (ms)",
+              "source_ids": [
+                "INC-B-001-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.duration_ms",
+                "value": 0.97,
+                "unit": "ms",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-log-r2",
+                "revision": 2,
+                "quote": "duration_ms=0.97"
+              }
+            },
+            {
+              "text": "의존 서비스 설정 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-001-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.configured_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-config-r2",
+                "revision": 2,
+                "quote": "inventory.endpoint=http://127.0.0.1:19082/inventory"
+              }
+            },
+            {
+              "text": "의존 서비스 기준 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-001-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.expected_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-config-r2",
+                "revision": 2,
+                "quote": "expected_port=19082"
+              }
+            },
+            {
+              "text": "의존 서비스 관측 상태: active (state)",
+              "source_ids": [
+                "INC-B-001-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.process_status",
+                "value": "active",
+                "unit": "state",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-health-r2",
+                "revision": 2,
+                "quote": "inventory process status=active"
+              }
+            },
+            {
+              "text": "의존 서비스 상태 조회: 200 (http_status)",
+              "source_ids": [
+                "INC-B-001-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.health_http_status",
+                "value": 200,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-health-r2",
+                "revision": 2,
+                "quote": "health HTTP200"
+              }
+            }
+          ],
+          "hypotheses": [],
+          "counterevidence": [],
+          "unknowns": [
+            "최종 근본 원인과 복구 결과는 확인되지 않았습니다."
+          ],
+          "citations": [
+            {
+              "document_id": "INC-B-001-log-r2",
+              "revision": 2,
+              "quote": "service=mes-orders dependency=inventory dependency_url=http://127.0.0.1:19082/inventory code=ORDER_OK http_status=200 duration_ms=0.97 message=order read completed; inventory reachable",
+              "title": "MES order API log"
+            },
+            {
+              "document_id": "INC-B-001-config-r2",
+              "revision": 2,
+              "quote": "inventory.endpoint=http://127.0.0.1:19082/inventory expected_port=19082 timeout_ms=120",
+              "title": "MES dependency configuration"
+            },
+            {
+              "document_id": "INC-B-001-health-r2",
+              "revision": 2,
+              "quote": "inventory process status=active; health HTTP200; actual_health_probe=http://127.0.0.1:19082/health",
+              "title": "Dependency health observation"
+            }
+          ],
+          "metrics": {
+            "assessment": "normal",
+            "facts_origin": "deterministic_observations",
+            "synthetic": true,
+            "inference": "deterministic observable baseline",
+            "retrieval_ms": 1.595,
+            "inference_ms": 1.66,
+            "total_ms": 3.257,
+            "evidence_count": 5
+          },
+          "gate": {
+            "passed": true,
+            "issues": []
+          },
+          "id": "2527cd14a2fd4409b3f1358060f6b7a0",
+          "incident_id": "INC-B-001",
+          "site": "B",
+          "mode": "baseline",
+          "status": "needs_review",
+          "review": null
+        }
+      },
+      "model": {
+        "passed": true,
+        "category_correct": true,
+        "analysis": {
+          "summary": "정상 주문 조회의 관측 근거를 정리했습니다. 사람의 검토가 필요합니다.",
+          "facts": [
+            {
+              "text": "MES 주문 조회 코드: ORDER_OK (code)",
+              "source_ids": [
+                "INC-B-001-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.code",
+                "value": "ORDER_OK",
+                "unit": "code",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-log-r2",
+                "revision": 2,
+                "quote": "code=ORDER_OK"
+              }
+            },
+            {
+              "text": "MES 응답 상태: 200 (http_status)",
+              "source_ids": [
+                "INC-B-001-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.http_status",
+                "value": 200,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-log-r2",
+                "revision": 2,
+                "quote": "http_status=200"
+              }
+            },
+            {
+              "text": "MES 관측 응답 시간: 0.97 (ms)",
+              "source_ids": [
+                "INC-B-001-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.duration_ms",
+                "value": 0.97,
+                "unit": "ms",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-log-r2",
+                "revision": 2,
+                "quote": "duration_ms=0.97"
+              }
+            },
+            {
+              "text": "의존 서비스 설정 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-001-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.configured_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-config-r2",
+                "revision": 2,
+                "quote": "inventory.endpoint=http://127.0.0.1:19082/inventory"
+              }
+            },
+            {
+              "text": "의존 서비스 기준 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-001-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.expected_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-config-r2",
+                "revision": 2,
+                "quote": "expected_port=19082"
+              }
+            },
+            {
+              "text": "의존 서비스 관측 상태: active (state)",
+              "source_ids": [
+                "INC-B-001-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.process_status",
+                "value": "active",
+                "unit": "state",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-health-r2",
+                "revision": 2,
+                "quote": "inventory process status=active"
+              }
+            },
+            {
+              "text": "의존 서비스 상태 조회: 200 (http_status)",
+              "source_ids": [
+                "INC-B-001-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.health_http_status",
+                "value": 200,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:18.944594+00:00",
+                "document_id": "INC-B-001-health-r2",
+                "revision": 2,
+                "quote": "health HTTP200"
+              }
+            }
+          ],
+          "hypotheses": [],
+          "counterevidence": [],
+          "unknowns": [
+            "최종 근본 원인과 복구 결과는 확인되지 않았습니다."
+          ],
+          "citations": [
+            {
+              "document_id": "INC-B-001-log-r2",
+              "revision": 2,
+              "quote": "service=mes-orders dependency=inventory dependency_url=http://127.0.0.1:19082/inventory code=ORDER_OK http_status=200 duration_ms=0.97 message=order read completed; inventory reachable",
+              "title": "MES order API log"
+            },
+            {
+              "document_id": "INC-B-001-config-r2",
+              "revision": 2,
+              "quote": "inventory.endpoint=http://127.0.0.1:19082/inventory expected_port=19082 timeout_ms=120",
+              "title": "MES dependency configuration"
+            },
+            {
+              "document_id": "INC-B-001-health-r2",
+              "revision": 2,
+              "quote": "inventory process status=active; health HTTP200; actual_health_probe=http://127.0.0.1:19082/health",
+              "title": "Dependency health observation"
+            }
+          ],
+          "metrics": {
+            "load_duration": 1667362760,
+            "prompt_eval_count": 473,
+            "prompt_eval_duration": 125256452,
+            "eval_count": 164,
+            "eval_duration": 1990825976,
+            "total_duration": 4361764979,
+            "done_reason": "stop",
+            "latency_ms": 4366.31,
+            "model": "qwen3:4b",
+            "requested_think": false,
+            "thinking_chars": 0,
+            "context_limit": 4096,
+            "concurrency": 1,
+            "trace_id": "be69e12c-058c-41ef-88ed-73a6438b316b",
+            "assessment": "normal",
+            "facts_origin": "deterministic_observations",
+            "synthetic": true,
+            "structured_json": true,
+            "model_task": "typed_observation_extraction",
+            "hypothesis_origin": "deterministic_provisional_rules",
+            "citation_origin": "model_plus_deterministic",
+            "thinking_off_verified": false,
+            "retrieval_ms": 1.186,
+            "inference_ms": 4366.914,
+            "total_ms": 4368.102,
+            "evidence_count": 5
+          },
+          "gate": {
+            "passed": true,
+            "issues": []
+          },
+          "id": "523dc0f0f1d5415793e1a7010b94da0e",
+          "incident_id": "INC-B-001",
+          "site": "B",
+          "mode": "ollama",
+          "status": "needs_review",
+          "review": null
+        }
+      }
+    },
+    {
+      "incident_id": "INC-B-002",
+      "expected_category": "address_mismatch",
+      "baseline": {
+        "passed": true,
+        "category_correct": true,
+        "analysis": {
+          "summary": "접속 주소 불일치의 관측 근거를 정리했습니다. 사람의 검토가 필요합니다.",
+          "facts": [
+            {
+              "text": "MES 주문 조회 코드: INV_CONNECT (code)",
+              "source_ids": [
+                "INC-B-002-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.code",
+                "value": "INV_CONNECT",
+                "unit": "code",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-log-r2",
+                "revision": 2,
+                "quote": "code=INV_CONNECT"
+              }
+            },
+            {
+              "text": "MES 응답 상태: 503 (http_status)",
+              "source_ids": [
+                "INC-B-002-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.http_status",
+                "value": 503,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-log-r2",
+                "revision": 2,
+                "quote": "http_status=503"
+              }
+            },
+            {
+              "text": "MES 관측 응답 시간: 0.24 (ms)",
+              "source_ids": [
+                "INC-B-002-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.duration_ms",
+                "value": 0.24,
+                "unit": "ms",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-log-r2",
+                "revision": 2,
+                "quote": "duration_ms=0.24"
+              }
+            },
+            {
+              "text": "의존 서비스 설정 포트: 19083 (port)",
+              "source_ids": [
+                "INC-B-002-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.configured_port",
+                "value": 19083,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-config-r2",
+                "revision": 2,
+                "quote": "inventory.endpoint=http://127.0.0.1:19083/inventory"
+              }
+            },
+            {
+              "text": "의존 서비스 기준 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-002-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.expected_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-config-r2",
+                "revision": 2,
+                "quote": "expected_port=19082"
+              }
+            },
+            {
+              "text": "의존 서비스 관측 상태: active (state)",
+              "source_ids": [
+                "INC-B-002-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.process_status",
+                "value": "active",
+                "unit": "state",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-health-r2",
+                "revision": 2,
+                "quote": "inventory process status=active"
+              }
+            },
+            {
+              "text": "의존 서비스 상태 조회: 200 (http_status)",
+              "source_ids": [
+                "INC-B-002-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.health_http_status",
+                "value": 200,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-health-r2",
+                "revision": 2,
+                "quote": "health HTTP200"
+              }
+            }
+          ],
+          "hypotheses": [
+            {
+              "text": "접속 주소 불일치 가능성이 있습니다. 최종 원인은 추가 확인이 필요합니다.",
+              "source_ids": [
+                "INC-B-002-log-r2",
+                "INC-B-002-config-r2",
+                "INC-B-002-health-r2"
+              ]
+            }
+          ],
+          "counterevidence": [
+            {
+              "text": "실행 중인 정상 상태 조회는 서비스 전체 단절 가설의 반증입니다.",
+              "source_ids": [
+                "INC-B-002-health-r2"
+              ]
+            }
+          ],
+          "unknowns": [
+            "최종 근본 원인과 복구 결과는 확인되지 않았습니다."
+          ],
+          "citations": [
+            {
+              "document_id": "INC-B-002-log-r2",
+              "revision": 2,
+              "quote": "service=mes-orders dependency=inventory dependency_url=http://127.0.0.1:19083/inventory code=INV_CONNECT http_status=503 duration_ms=0.24 message=inventory connection refused",
+              "title": "MES order API log"
+            },
+            {
+              "document_id": "INC-B-002-config-r2",
+              "revision": 2,
+              "quote": "inventory.endpoint=http://127.0.0.1:19083/inventory expected_port=19082 timeout_ms=120",
+              "title": "MES dependency configuration"
+            },
+            {
+              "document_id": "INC-B-002-health-r2",
+              "revision": 2,
+              "quote": "inventory process status=active; health HTTP200; actual_health_probe=http://127.0.0.1:19082/health",
+              "title": "Dependency health observation"
+            }
+          ],
+          "metrics": {
+            "assessment": "address_mismatch",
+            "facts_origin": "deterministic_observations",
+            "synthetic": true,
+            "inference": "deterministic observable baseline",
+            "retrieval_ms": 1.336,
+            "inference_ms": 0.378,
+            "total_ms": 1.717,
+            "evidence_count": 6
+          },
+          "gate": {
+            "passed": true,
+            "issues": []
+          },
+          "id": "7b36197e39654d8c8482686de4bd315a",
+          "incident_id": "INC-B-002",
+          "site": "B",
+          "mode": "baseline",
+          "status": "needs_review",
+          "review": null
+        }
+      },
+      "model": {
+        "passed": true,
+        "category_correct": true,
+        "analysis": {
+          "summary": "접속 주소 불일치의 관측 근거를 정리했습니다. 사람의 검토가 필요합니다.",
+          "facts": [
+            {
+              "text": "MES 주문 조회 코드: INV_CONNECT (code)",
+              "source_ids": [
+                "INC-B-002-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.code",
+                "value": "INV_CONNECT",
+                "unit": "code",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-log-r2",
+                "revision": 2,
+                "quote": "code=INV_CONNECT"
+              }
+            },
+            {
+              "text": "MES 응답 상태: 503 (http_status)",
+              "source_ids": [
+                "INC-B-002-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.http_status",
+                "value": 503,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-log-r2",
+                "revision": 2,
+                "quote": "http_status=503"
+              }
+            },
+            {
+              "text": "MES 관측 응답 시간: 0.24 (ms)",
+              "source_ids": [
+                "INC-B-002-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.duration_ms",
+                "value": 0.24,
+                "unit": "ms",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-log-r2",
+                "revision": 2,
+                "quote": "duration_ms=0.24"
+              }
+            },
+            {
+              "text": "의존 서비스 설정 포트: 19083 (port)",
+              "source_ids": [
+                "INC-B-002-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.configured_port",
+                "value": 19083,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-config-r2",
+                "revision": 2,
+                "quote": "inventory.endpoint=http://127.0.0.1:19083/inventory"
+              }
+            },
+            {
+              "text": "의존 서비스 기준 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-002-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.expected_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-config-r2",
+                "revision": 2,
+                "quote": "expected_port=19082"
+              }
+            },
+            {
+              "text": "의존 서비스 관측 상태: active (state)",
+              "source_ids": [
+                "INC-B-002-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.process_status",
+                "value": "active",
+                "unit": "state",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-health-r2",
+                "revision": 2,
+                "quote": "inventory process status=active"
+              }
+            },
+            {
+              "text": "의존 서비스 상태 조회: 200 (http_status)",
+              "source_ids": [
+                "INC-B-002-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.health_http_status",
+                "value": 200,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:19.769496+00:00",
+                "document_id": "INC-B-002-health-r2",
+                "revision": 2,
+                "quote": "health HTTP200"
+              }
+            }
+          ],
+          "hypotheses": [
+            {
+              "text": "접속 주소 불일치 가능성이 있습니다. 최종 원인은 추가 확인이 필요합니다.",
+              "source_ids": [
+                "INC-B-002-log-r2",
+                "INC-B-002-config-r2",
+                "INC-B-002-health-r2"
+              ]
+            }
+          ],
+          "counterevidence": [
+            {
+              "text": "실행 중인 정상 상태 조회는 서비스 전체 단절 가설의 반증입니다.",
+              "source_ids": [
+                "INC-B-002-health-r2"
+              ]
+            }
+          ],
+          "unknowns": [
+            "최종 근본 원인과 복구 결과는 확인되지 않았습니다."
+          ],
+          "citations": [
+            {
+              "document_id": "INC-B-002-log-r2",
+              "revision": 2,
+              "quote": "service=mes-orders dependency=inventory dependency_url=http://127.0.0.1:19083/inventory code=INV_CONNECT http_status=503 duration_ms=0.24 message=inventory connection refused",
+              "title": "MES order API log"
+            },
+            {
+              "document_id": "INC-B-002-config-r2",
+              "revision": 2,
+              "quote": "inventory.endpoint=http://127.0.0.1:19083/inventory expected_port=19082 timeout_ms=120",
+              "title": "MES dependency configuration"
+            },
+            {
+              "document_id": "INC-B-002-health-r2",
+              "revision": 2,
+              "quote": "inventory process status=active; health HTTP200; actual_health_probe=http://127.0.0.1:19082/health",
+              "title": "Dependency health observation"
+            }
+          ],
+          "metrics": {
+            "load_duration": 173858912,
+            "prompt_eval_count": 523,
+            "prompt_eval_duration": 93007264,
+            "eval_count": 161,
+            "eval_duration": 1952131524,
+            "total_duration": 2714547195,
+            "done_reason": "stop",
+            "latency_ms": 2716.44,
+            "model": "qwen3:4b",
+            "requested_think": false,
+            "thinking_chars": 0,
+            "context_limit": 4096,
+            "concurrency": 1,
+            "trace_id": "dec44845-b782-4d33-8063-6c78a5b9a982",
+            "assessment": "address_mismatch",
+            "facts_origin": "deterministic_observations",
+            "synthetic": true,
+            "structured_json": true,
+            "model_task": "typed_observation_extraction",
+            "hypothesis_origin": "deterministic_provisional_rules",
+            "citation_origin": "model_plus_deterministic",
+            "thinking_off_verified": false,
+            "retrieval_ms": 1.316,
+            "inference_ms": 2717.081,
+            "total_ms": 2718.4,
+            "evidence_count": 6
+          },
+          "gate": {
+            "passed": true,
+            "issues": []
+          },
+          "id": "e62210c0b0ea4b9580d83bbed79a665b",
+          "incident_id": "INC-B-002",
+          "site": "B",
+          "mode": "ollama",
+          "status": "needs_review",
+          "review": null
+        }
+      }
+    },
+    {
+      "incident_id": "INC-B-003",
+      "expected_category": "dependency_unavailable",
+      "baseline": {
+        "passed": true,
+        "category_correct": true,
+        "analysis": {
+          "summary": "의존 서비스 가용성 문제의 관측 근거를 정리했습니다. 사람의 검토가 필요합니다.",
+          "facts": [
+            {
+              "text": "MES 주문 조회 코드: INV_CONNECT (code)",
+              "source_ids": [
+                "INC-B-003-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.code",
+                "value": "INV_CONNECT",
+                "unit": "code",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.591929+00:00",
+                "document_id": "INC-B-003-log-r2",
+                "revision": 2,
+                "quote": "code=INV_CONNECT"
+              }
+            },
+            {
+              "text": "MES 응답 상태: 503 (http_status)",
+              "source_ids": [
+                "INC-B-003-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.http_status",
+                "value": 503,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.591929+00:00",
+                "document_id": "INC-B-003-log-r2",
+                "revision": 2,
+                "quote": "http_status=503"
+              }
+            },
+            {
+              "text": "MES 관측 응답 시간: 0.37 (ms)",
+              "source_ids": [
+                "INC-B-003-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.duration_ms",
+                "value": 0.37,
+                "unit": "ms",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.591929+00:00",
+                "document_id": "INC-B-003-log-r2",
+                "revision": 2,
+                "quote": "duration_ms=0.37"
+              }
+            },
+            {
+              "text": "의존 서비스 설정 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-003-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.configured_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.591929+00:00",
+                "document_id": "INC-B-003-config-r2",
+                "revision": 2,
+                "quote": "inventory.endpoint=http://127.0.0.1:19082/inventory"
+              }
+            },
+            {
+              "text": "의존 서비스 기준 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-003-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.expected_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.591929+00:00",
+                "document_id": "INC-B-003-config-r2",
+                "revision": 2,
+                "quote": "expected_port=19082"
+              }
+            },
+            {
+              "text": "의존 서비스 관측 상태: inactive (state)",
+              "source_ids": [
+                "INC-B-003-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.process_status",
+                "value": "inactive",
+                "unit": "state",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.591929+00:00",
+                "document_id": "INC-B-003-health-r2",
+                "revision": 2,
+                "quote": "inventory process status=inactive"
+              }
+            }
+          ],
+          "hypotheses": [
+            {
+              "text": "의존 서비스 가용성 문제 가능성이 있습니다. 최종 원인은 추가 확인이 필요합니다.",
+              "source_ids": [
+                "INC-B-003-log-r2",
+                "INC-B-003-config-r2",
+                "INC-B-003-health-r2"
+              ]
+            }
+          ],
+          "counterevidence": [],
+          "unknowns": [
+            "최종 근본 원인과 복구 결과는 확인되지 않았습니다."
+          ],
+          "citations": [
+            {
+              "document_id": "INC-B-003-log-r2",
+              "revision": 2,
+              "quote": "service=mes-orders dependency=inventory dependency_url=http://127.0.0.1:19082/inventory code=INV_CONNECT http_status=503 duration_ms=0.37 message=inventory connection refused",
+              "title": "MES order API log"
+            },
+            {
+              "document_id": "INC-B-003-config-r2",
+              "revision": 2,
+              "quote": "inventory.endpoint=http://127.0.0.1:19082/inventory expected_port=19082 timeout_ms=120",
+              "title": "MES dependency configuration"
+            },
+            {
+              "document_id": "INC-B-003-health-r2",
+              "revision": 2,
+              "quote": "inventory process status=inactive; health unavailable; actual_health_probe=http://127.0.0.1:19082/health",
+              "title": "Dependency health observation"
+            }
+          ],
+          "metrics": {
+            "assessment": "dependency_unavailable",
+            "facts_origin": "deterministic_observations",
+            "synthetic": true,
+            "inference": "deterministic observable baseline",
+            "retrieval_ms": 1.179,
+            "inference_ms": 0.376,
+            "total_ms": 1.558,
+            "evidence_count": 5
+          },
+          "gate": {
+            "passed": true,
+            "issues": []
+          },
+          "id": "bab8447ca46941998316993331703ea9",
+          "incident_id": "INC-B-003",
+          "site": "B",
+          "mode": "baseline",
+          "status": "needs_review",
+          "review": null
+        }
+      },
+      "model": {
+        "passed": true,
+        "category_correct": true,
+        "analysis": {
+          "summary": "의존 서비스 가용성 문제의 관측 근거를 정리했습니다. 사람의 검토가 필요합니다.",
+          "facts": [
+            {
+              "text": "MES 주문 조회 코드: INV_CONNECT (code)",
+              "source_ids": [
+                "INC-B-003-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.code",
+                "value": "INV_CONNECT",
+                "unit": "code",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.591929+00:00",
+                "document_id": "INC-B-003-log-r2",
+                "revision": 2,
+                "quote": "code=INV_CONNECT"
+              }
+            },
+            {
+              "text": "MES 응답 상태: 503 (http_status)",
+              "source_ids": [
+                "INC-B-003-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.http_status",
+                "value": 503,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.591929+00:00",
+                "document_id": "INC-B-003-log-r2",
+                "revision": 2,
+                "quote": "http_status=503"
+              }
+            },
+            {
+              "text": "MES 관측 응답 시간: 0.37 (ms)",
+              "source_ids": [
+                "INC-B-003-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.duration_ms",
+                "value": 0.37,
+                "unit": "ms",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.591929+00:00",
+                "document_id": "INC-B-003-log-r2",
+                "revision": 2,
+                "quote": "duration_ms=0.37"
+              }
+            },
+            {
+              "text": "의존 서비스 설정 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-003-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.configured_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.591929+00:00",
+                "document_id": "INC-B-003-config-r2",
+                "revision": 2,
+                "quote": "inventory.endpoint=http://127.0.0.1:19082/inventory"
+              }
+            },
+            {
+              "text": "의존 서비스 기준 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-003-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.expected_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.591929+00:00",
+                "document_id": "INC-B-003-config-r2",
+                "revision": 2,
+                "quote": "expected_port=19082"
+              }
+            },
+            {
+              "text": "의존 서비스 관측 상태: inactive (state)",
+              "source_ids": [
+                "INC-B-003-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.process_status",
+                "value": "inactive",
+                "unit": "state",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.591929+00:00",
+                "document_id": "INC-B-003-health-r2",
+                "revision": 2,
+                "quote": "inventory process status=inactive"
+              }
+            }
+          ],
+          "hypotheses": [
+            {
+              "text": "의존 서비스 가용성 문제 가능성이 있습니다. 최종 원인은 추가 확인이 필요합니다.",
+              "source_ids": [
+                "INC-B-003-log-r2",
+                "INC-B-003-config-r2",
+                "INC-B-003-health-r2"
+              ]
+            }
+          ],
+          "counterevidence": [],
+          "unknowns": [
+            "최종 근본 원인과 복구 결과는 확인되지 않았습니다."
+          ],
+          "citations": [
+            {
+              "document_id": "INC-B-003-log-r2",
+              "revision": 2,
+              "quote": "service=mes-orders dependency=inventory dependency_url=http://127.0.0.1:19082/inventory code=INV_CONNECT http_status=503 duration_ms=0.37 message=inventory connection refused",
+              "title": "MES order API log"
+            },
+            {
+              "document_id": "INC-B-003-config-r2",
+              "revision": 2,
+              "quote": "inventory.endpoint=http://127.0.0.1:19082/inventory expected_port=19082 timeout_ms=120",
+              "title": "MES dependency configuration"
+            },
+            {
+              "document_id": "INC-B-003-health-r2",
+              "revision": 2,
+              "quote": "inventory process status=inactive; health unavailable; actual_health_probe=http://127.0.0.1:19082/health",
+              "title": "Dependency health observation"
+            }
+          ],
+          "metrics": {
+            "load_duration": 169185170,
+            "prompt_eval_count": 467,
+            "prompt_eval_duration": 81463203,
+            "eval_count": 158,
+            "eval_duration": 1908922855,
+            "total_duration": 2578577995,
+            "done_reason": "stop",
+            "latency_ms": 2580.53,
+            "model": "qwen3:4b",
+            "requested_think": false,
+            "thinking_chars": 0,
+            "context_limit": 4096,
+            "concurrency": 1,
+            "trace_id": "309a898f-0896-400b-bbb4-da5affff35e9",
+            "assessment": "dependency_unavailable",
+            "facts_origin": "deterministic_observations",
+            "synthetic": true,
+            "structured_json": true,
+            "model_task": "typed_observation_extraction",
+            "hypothesis_origin": "deterministic_provisional_rules",
+            "citation_origin": "model_plus_deterministic",
+            "thinking_off_verified": false,
+            "retrieval_ms": 1.136,
+            "inference_ms": 2581.172,
+            "total_ms": 2582.311,
+            "evidence_count": 5
+          },
+          "gate": {
+            "passed": true,
+            "issues": []
+          },
+          "id": "5ee1b31b9f6e43b2a4e59aa97468e412",
+          "incident_id": "INC-B-003",
+          "site": "B",
+          "mode": "ollama",
+          "status": "needs_review",
+          "review": null
+        }
+      }
+    },
+    {
+      "incident_id": "INC-B-004",
+      "expected_category": "latency",
+      "baseline": {
+        "passed": true,
+        "category_correct": true,
+        "analysis": {
+          "summary": "의존 서비스 지연의 관측 근거를 정리했습니다. 사람의 검토가 필요합니다.",
+          "facts": [
+            {
+              "text": "MES 주문 조회 코드: INV_TIMEOUT (code)",
+              "source_ids": [
+                "INC-B-004-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.code",
+                "value": "INV_TIMEOUT",
+                "unit": "code",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-log-r2",
+                "revision": 2,
+                "quote": "code=INV_TIMEOUT"
+              }
+            },
+            {
+              "text": "MES 응답 상태: 504 (http_status)",
+              "source_ids": [
+                "INC-B-004-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.http_status",
+                "value": 504,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-log-r2",
+                "revision": 2,
+                "quote": "http_status=504"
+              }
+            },
+            {
+              "text": "MES 관측 응답 시간: 121.62 (ms)",
+              "source_ids": [
+                "INC-B-004-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.duration_ms",
+                "value": 121.62,
+                "unit": "ms",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-log-r2",
+                "revision": 2,
+                "quote": "duration_ms=121.62"
+              }
+            },
+            {
+              "text": "의존 서비스 설정 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-004-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.configured_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-config-r2",
+                "revision": 2,
+                "quote": "inventory.endpoint=http://127.0.0.1:19082/inventory"
+              }
+            },
+            {
+              "text": "의존 서비스 기준 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-004-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.expected_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-config-r2",
+                "revision": 2,
+                "quote": "expected_port=19082"
+              }
+            },
+            {
+              "text": "의존 서비스 관측 상태: active (state)",
+              "source_ids": [
+                "INC-B-004-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.process_status",
+                "value": "active",
+                "unit": "state",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-health-r2",
+                "revision": 2,
+                "quote": "inventory process status=active"
+              }
+            },
+            {
+              "text": "의존 서비스 상태 조회: 200 (http_status)",
+              "source_ids": [
+                "INC-B-004-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.health_http_status",
+                "value": 200,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-health-r2",
+                "revision": 2,
+                "quote": "health HTTP200"
+              }
+            }
+          ],
+          "hypotheses": [
+            {
+              "text": "의존 서비스 지연 가능성이 있습니다. 최종 원인은 추가 확인이 필요합니다.",
+              "source_ids": [
+                "INC-B-004-log-r2",
+                "INC-B-004-config-r2",
+                "INC-B-004-health-r2"
+              ]
+            }
+          ],
+          "counterevidence": [
+            {
+              "text": "실행 중인 정상 상태 조회는 서비스 전체 단절 가설의 반증입니다.",
+              "source_ids": [
+                "INC-B-004-health-r2"
+              ]
+            }
+          ],
+          "unknowns": [
+            "최종 근본 원인과 복구 결과는 확인되지 않았습니다."
+          ],
+          "citations": [
+            {
+              "document_id": "INC-B-004-log-r2",
+              "revision": 2,
+              "quote": "service=mes-orders dependency=inventory dependency_url=http://127.0.0.1:19082/inventory code=INV_TIMEOUT http_status=504 duration_ms=121.62 message=inventory dependency read timed out",
+              "title": "MES order API log"
+            },
+            {
+              "document_id": "INC-B-004-config-r2",
+              "revision": 2,
+              "quote": "inventory.endpoint=http://127.0.0.1:19082/inventory expected_port=19082 timeout_ms=120",
+              "title": "MES dependency configuration"
+            },
+            {
+              "document_id": "INC-B-004-health-r2",
+              "revision": 2,
+              "quote": "inventory process status=active; health HTTP200; actual_health_probe=http://127.0.0.1:19082/health",
+              "title": "Dependency health observation"
+            }
+          ],
+          "metrics": {
+            "assessment": "latency",
+            "facts_origin": "deterministic_observations",
+            "synthetic": true,
+            "inference": "deterministic observable baseline",
+            "retrieval_ms": 1.35,
+            "inference_ms": 0.435,
+            "total_ms": 1.787,
+            "evidence_count": 5
+          },
+          "gate": {
+            "passed": true,
+            "issues": []
+          },
+          "id": "e3488148bf0b4a02a13ff954af393a60",
+          "incident_id": "INC-B-004",
+          "site": "B",
+          "mode": "baseline",
+          "status": "needs_review",
+          "review": null
+        }
+      },
+      "model": {
+        "passed": true,
+        "category_correct": true,
+        "analysis": {
+          "summary": "의존 서비스 지연의 관측 근거를 정리했습니다. 사람의 검토가 필요합니다.",
+          "facts": [
+            {
+              "text": "MES 주문 조회 코드: INV_TIMEOUT (code)",
+              "source_ids": [
+                "INC-B-004-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.code",
+                "value": "INV_TIMEOUT",
+                "unit": "code",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-log-r2",
+                "revision": 2,
+                "quote": "code=INV_TIMEOUT"
+              }
+            },
+            {
+              "text": "MES 응답 상태: 504 (http_status)",
+              "source_ids": [
+                "INC-B-004-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.http_status",
+                "value": 504,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-log-r2",
+                "revision": 2,
+                "quote": "http_status=504"
+              }
+            },
+            {
+              "text": "MES 관측 응답 시간: 121.62 (ms)",
+              "source_ids": [
+                "INC-B-004-log-r2"
+              ],
+              "observation": {
+                "entity": "mes-orders.duration_ms",
+                "value": 121.62,
+                "unit": "ms",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-log-r2",
+                "revision": 2,
+                "quote": "duration_ms=121.62"
+              }
+            },
+            {
+              "text": "의존 서비스 설정 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-004-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.configured_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-config-r2",
+                "revision": 2,
+                "quote": "inventory.endpoint=http://127.0.0.1:19082/inventory"
+              }
+            },
+            {
+              "text": "의존 서비스 기준 포트: 19082 (port)",
+              "source_ids": [
+                "INC-B-004-config-r2"
+              ],
+              "observation": {
+                "entity": "inventory.expected_port",
+                "value": 19082,
+                "unit": "port",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-config-r2",
+                "revision": 2,
+                "quote": "expected_port=19082"
+              }
+            },
+            {
+              "text": "의존 서비스 관측 상태: active (state)",
+              "source_ids": [
+                "INC-B-004-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.process_status",
+                "value": "active",
+                "unit": "state",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-health-r2",
+                "revision": 2,
+                "quote": "inventory process status=active"
+              }
+            },
+            {
+              "text": "의존 서비스 상태 조회: 200 (http_status)",
+              "source_ids": [
+                "INC-B-004-health-r2"
+              ],
+              "observation": {
+                "entity": "inventory.health_http_status",
+                "value": 200,
+                "unit": "http_status",
+                "polarity": "affirmed",
+                "observed_at": "2026-09-30T07:09:20.916326+00:00",
+                "document_id": "INC-B-004-health-r2",
+                "revision": 2,
+                "quote": "health HTTP200"
+              }
+            }
+          ],
+          "hypotheses": [
+            {
+              "text": "의존 서비스 지연 가능성이 있습니다. 최종 원인은 추가 확인이 필요합니다.",
+              "source_ids": [
+                "INC-B-004-log-r2",
+                "INC-B-004-config-r2",
+                "INC-B-004-health-r2"
+              ]
+            }
+          ],
+          "counterevidence": [
+            {
+              "text": "실행 중인 정상 상태 조회는 서비스 전체 단절 가설의 반증입니다.",
+              "source_ids": [
+                "INC-B-004-health-r2"
+              ]
+            }
+          ],
+          "unknowns": [
+            "최종 근본 원인과 복구 결과는 확인되지 않았습니다."
+          ],
+          "citations": [
+            {
+              "document_id": "INC-B-004-log-r2",
+              "revision": 2,
+              "quote": "service=mes-orders dependency=inventory dependency_url=http://127.0.0.1:19082/inventory code=INV_TIMEOUT http_status=504 duration_ms=121.62 message=inventory dependency read timed out",
+              "title": "MES order API log"
+            },
+            {
+              "document_id": "INC-B-004-config-r2",
+              "revision": 2,
+              "quote": "inventory.endpoint=http://127.0.0.1:19082/inventory expected_port=19082 timeout_ms=120",
+              "title": "MES dependency configuration"
+            },
+            {
+              "document_id": "INC-B-004-health-r2",
+              "revision": 2,
+              "quote": "inventory process status=active; health HTTP200; actual_health_probe=http://127.0.0.1:19082/health",
+              "title": "Dependency health observation"
+            }
+          ],
+          "metrics": {
+            "load_duration": 171989497,
+            "prompt_eval_count": 474,
+            "prompt_eval_duration": 81245685,
+            "eval_count": 167,
+            "eval_duration": 2023855367,
+            "total_duration": 2786865660,
+            "done_reason": "stop",
+            "latency_ms": 2788.89,
+            "model": "qwen3:4b",
+            "requested_think": false,
+            "thinking_chars": 0,
+            "context_limit": 4096,
+            "concurrency": 1,
+            "trace_id": "bb1d5fa3-99b9-4a34-a571-9526bef86cb0",
+            "assessment": "latency",
+            "facts_origin": "deterministic_observations",
+            "synthetic": true,
+            "structured_json": true,
+            "model_task": "typed_observation_extraction",
+            "hypothesis_origin": "deterministic_provisional_rules",
+            "citation_origin": "model_plus_deterministic",
+            "thinking_off_verified": false,
+            "retrieval_ms": 1.316,
+            "inference_ms": 2789.623,
+            "total_ms": 2790.941,
+            "evidence_count": 5
+          },
+          "gate": {
+            "passed": true,
+            "issues": []
+          },
+          "id": "4d589f443a8b48bdbab9aa728599cf59",
+          "incident_id": "INC-B-004",
+          "site": "B",
+          "mode": "ollama",
+          "status": "needs_review",
+          "review": null
+        }
+      }
+    }
+  ],
+  "peak_gpu_used_mib": 3451,
+  "minimum_mem_available_kib": 26321620
+}

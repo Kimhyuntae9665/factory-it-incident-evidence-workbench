@@ -1,0 +1,363 @@
+[
+  {
+    "id": "technical-001",
+    "category": "log_config_health_coverage",
+    "profile": "B-it",
+    "incident_id": "INC-B-001",
+    "query": "ORDER_OK mes-orders inventory.endpoint expected_port timeout_ms inventory process status health duration_ms",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-001-log",
+        "quote": "code=ORDER_OK"
+      },
+      {
+        "logical_id": "INC-B-001-log",
+        "quote": "duration_ms="
+      },
+      {
+        "logical_id": "INC-B-001-config",
+        "quote": "expected_port=19082"
+      },
+      {
+        "logical_id": "INC-B-001-config",
+        "quote": "timeout_ms=120"
+      },
+      {
+        "logical_id": "INC-B-001-health",
+        "quote": "inventory process status=active"
+      }
+    ]
+  },
+  {
+    "id": "technical-002",
+    "category": "log_config_health_coverage",
+    "profile": "B-it",
+    "incident_id": "INC-B-002",
+    "query": "INV_CONNECT mes-orders inventory.endpoint expected_port timeout_ms inventory process status health duration_ms",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-002-log",
+        "quote": "code=INV_CONNECT"
+      },
+      {
+        "logical_id": "INC-B-002-log",
+        "quote": "duration_ms="
+      },
+      {
+        "logical_id": "INC-B-002-config",
+        "quote": "expected_port=19082"
+      },
+      {
+        "logical_id": "INC-B-002-config",
+        "quote": "timeout_ms=120"
+      },
+      {
+        "logical_id": "INC-B-002-health",
+        "quote": "inventory process status=active"
+      }
+    ]
+  },
+  {
+    "id": "technical-003",
+    "category": "log_config_health_coverage",
+    "profile": "B-it",
+    "incident_id": "INC-B-003",
+    "query": "INV_CONNECT mes-orders inventory.endpoint expected_port timeout_ms inventory process status health duration_ms",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-003-log",
+        "quote": "code=INV_CONNECT"
+      },
+      {
+        "logical_id": "INC-B-003-log",
+        "quote": "duration_ms="
+      },
+      {
+        "logical_id": "INC-B-003-config",
+        "quote": "expected_port=19082"
+      },
+      {
+        "logical_id": "INC-B-003-config",
+        "quote": "timeout_ms=120"
+      },
+      {
+        "logical_id": "INC-B-003-health",
+        "quote": "inventory process status=inactive"
+      }
+    ]
+  },
+  {
+    "id": "technical-004",
+    "category": "log_config_health_coverage",
+    "profile": "B-it",
+    "incident_id": "INC-B-004",
+    "query": "INV_TIMEOUT mes-orders inventory.endpoint expected_port timeout_ms inventory process status health duration_ms",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-004-log",
+        "quote": "code=INV_TIMEOUT"
+      },
+      {
+        "logical_id": "INC-B-004-log",
+        "quote": "duration_ms="
+      },
+      {
+        "logical_id": "INC-B-004-config",
+        "quote": "expected_port=19082"
+      },
+      {
+        "logical_id": "INC-B-004-config",
+        "quote": "timeout_ms=120"
+      },
+      {
+        "logical_id": "INC-B-004-health",
+        "quote": "inventory process status=active"
+      }
+    ]
+  },
+  {
+    "id": "code-002",
+    "category": "digitless_error_code",
+    "profile": "B-it",
+    "incident_id": "INC-B-002",
+    "query": "INV_CONNECT",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-002-log",
+        "quote": "code=INV_CONNECT"
+      }
+    ]
+  },
+  {
+    "id": "code-003",
+    "category": "digitless_error_code",
+    "profile": "B-it",
+    "incident_id": "INC-B-003",
+    "query": "INV_CONNECT",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-003-log",
+        "quote": "code=INV_CONNECT"
+      }
+    ]
+  },
+  {
+    "id": "code-004",
+    "category": "digitless_error_code",
+    "profile": "B-it",
+    "incident_id": "INC-B-004",
+    "query": "INV_TIMEOUT",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-004-log",
+        "quote": "code=INV_TIMEOUT"
+      }
+    ]
+  },
+  {
+    "id": "exact-id-log",
+    "category": "exact_id",
+    "profile": "B-it",
+    "incident_id": "INC-B-002",
+    "query": "INC-B-002-log-r2",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-002-log",
+        "document_id": "INC-B-002-log-r2",
+        "quote": "code=INV_CONNECT"
+      }
+    ]
+  },
+  {
+    "id": "exact-id-config",
+    "category": "exact_id",
+    "profile": "B-it",
+    "incident_id": "INC-B-002",
+    "query": "INC-B-002-config-r2",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-002-config",
+        "document_id": "INC-B-002-config-r2",
+        "quote": "expected_port=19082"
+      }
+    ]
+  },
+  {
+    "id": "exact-id-health",
+    "category": "exact_id",
+    "profile": "B-it",
+    "incident_id": "INC-B-004",
+    "query": "INC-B-004-health-r2",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-004-health",
+        "document_id": "INC-B-004-health-r2",
+        "quote": "inventory process status=active"
+      }
+    ]
+  },
+  {
+    "id": "korean-001",
+    "category": "korean_paraphrase",
+    "profile": "B-it",
+    "incident_id": "INC-B-001",
+    "query": "주문이 잘 조회되는지 기록과 설정 및 의존 서비스 상태를 함께 확인해 주세요.",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-001-log",
+        "quote": "code=ORDER_OK"
+      },
+      {
+        "logical_id": "INC-B-001-log",
+        "quote": "duration_ms="
+      },
+      {
+        "logical_id": "INC-B-001-config",
+        "quote": "expected_port=19082"
+      },
+      {
+        "logical_id": "INC-B-001-config",
+        "quote": "timeout_ms=120"
+      },
+      {
+        "logical_id": "INC-B-001-health",
+        "quote": "inventory process status=active"
+      }
+    ]
+  },
+  {
+    "id": "korean-002",
+    "category": "korean_paraphrase",
+    "profile": "B-it",
+    "incident_id": "INC-B-002",
+    "query": "재고 서비스 접속이 거부됐어요. 실제 접속 주소와 기준 포트, 프로세스 생존 여부를 비교해 주세요.",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-002-log",
+        "quote": "code=INV_CONNECT"
+      },
+      {
+        "logical_id": "INC-B-002-log",
+        "quote": "duration_ms="
+      },
+      {
+        "logical_id": "INC-B-002-config",
+        "quote": "expected_port=19082"
+      },
+      {
+        "logical_id": "INC-B-002-config",
+        "quote": "timeout_ms=120"
+      },
+      {
+        "logical_id": "INC-B-002-health",
+        "quote": "inventory process status=active"
+      }
+    ]
+  },
+  {
+    "id": "korean-003",
+    "category": "korean_paraphrase",
+    "profile": "B-it",
+    "incident_id": "INC-B-003",
+    "query": "주문 조회가 연결 실패로 끝났어요. 주소 설정과 재고 서비스 실행 상태를 보여 주세요.",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-003-log",
+        "quote": "code=INV_CONNECT"
+      },
+      {
+        "logical_id": "INC-B-003-log",
+        "quote": "duration_ms="
+      },
+      {
+        "logical_id": "INC-B-003-config",
+        "quote": "expected_port=19082"
+      },
+      {
+        "logical_id": "INC-B-003-config",
+        "quote": "timeout_ms=120"
+      },
+      {
+        "logical_id": "INC-B-003-health",
+        "quote": "inventory process status=inactive"
+      }
+    ]
+  },
+  {
+    "id": "korean-004",
+    "category": "korean_paraphrase",
+    "profile": "B-it",
+    "incident_id": "INC-B-004",
+    "query": "주문 조회가 오래 걸려 제한 시간에 걸렸어요. 처리 시간과 시간 제한, 서비스 상태를 확인해 주세요.",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-004-log",
+        "quote": "code=INV_TIMEOUT"
+      },
+      {
+        "logical_id": "INC-B-004-log",
+        "quote": "duration_ms="
+      },
+      {
+        "logical_id": "INC-B-004-config",
+        "quote": "expected_port=19082"
+      },
+      {
+        "logical_id": "INC-B-004-config",
+        "quote": "timeout_ms=120"
+      },
+      {
+        "logical_id": "INC-B-004-health",
+        "quote": "inventory process status=active"
+      }
+    ]
+  },
+  {
+    "id": "counter-002",
+    "category": "counterevidence",
+    "profile": "B-it",
+    "incident_id": "INC-B-002",
+    "query": "서비스 전체 단절 가설을 반박하는 상태 조회 근거 health HTTP200 inventory process status=active",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-002-health",
+        "quote": "inventory process status=active"
+      },
+      {
+        "logical_id": "INC-B-002-health",
+        "quote": "health HTTP200"
+      }
+    ]
+  },
+  {
+    "id": "counter-004",
+    "category": "counterevidence",
+    "profile": "B-it",
+    "incident_id": "INC-B-004",
+    "query": "서비스 전체 단절 가설을 반박하는 상태 조회 근거 health HTTP200 inventory process status=active",
+    "required_spans": [
+      {
+        "logical_id": "INC-B-004-health",
+        "quote": "inventory process status=active"
+      },
+      {
+        "logical_id": "INC-B-004-health",
+        "quote": "health HTTP200"
+      }
+    ]
+  },
+  {
+    "id": "current-runbook",
+    "category": "latest_revision_positive",
+    "profile": "B-it",
+    "incident_id": "INC-B-004",
+    "query": "RUN-B-r2 A timeout alone does not prove service failure",
+    "required_spans": [
+      {
+        "logical_id": "RUN-B",
+        "document_id": "RUN-B-r2",
+        "quote": "A timeout alone does not prove service failure."
+      }
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "incident_id": "INC-A-001",
+    "expected": "normal",
+    "split": "calibration"
+  },
+  {
+    "incident_id": "INC-A-002",
+    "expected": "wrong_endpoint",
+    "split": "calibration"
+  },
+  {
+    "incident_id": "INC-A-003",
+    "expected": "dependency_down",
+    "split": "calibration"
+  },
+  {
+    "incident_id": "INC-A-004",
+    "expected": "delay",
+    "split": "calibration"
+  },
+  {
+    "incident_id": "INC-B-001",
+    "expected": "normal",
+    "split": "heldout"
+  },
+  {
+    "incident_id": "INC-B-002",
+    "expected": "wrong_endpoint",
+    "split": "heldout"
+  },
+  {
+    "incident_id": "INC-B-003",
+    "expected": "dependency_down",
+    "split": "heldout"
+  },
+  {
+    "incident_id": "INC-B-004",
+    "expected": "delay",
+    "split": "heldout"
+  }
+]
