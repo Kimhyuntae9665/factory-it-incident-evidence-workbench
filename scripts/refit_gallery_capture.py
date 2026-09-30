@@ -35,6 +35,20 @@ def quote(client, index=0):
     client.evaluate("document.querySelectorAll('.citation-card')[" + str(index) + "].click()")
     wait(client, "document.querySelectorAll('#document-content mark').length>0 && document.querySelector('#citation-check').textContent.includes('정확히 일치')")
 
+def frame_case_result(client, incident_id):
+    if incident_id == "INC-A-001":
+        client.evaluate("window.scrollTo(0,0)")
+        return
+    if incident_id == "INC-A-002":
+        client.evaluate("document.querySelector('#document-view').scrollIntoView({block:'start'});window.scrollBy(0,130)")
+        assert client.evaluate("document.querySelector('#document-content').textContent.includes('expected_port=19082') && document.querySelector('#document-content').textContent.includes('19083')"), "Port evidence missing"
+    elif incident_id == "INC-A-003":
+        client.evaluate("document.querySelector('#facts').scrollIntoView({block:'start'});window.scrollBy(0,-130)")
+        assert client.evaluate("document.querySelector('#facts').textContent.trim().length>0"), "Incident facts missing"
+    elif incident_id == "INC-A-004":
+        client.evaluate("document.querySelector('#counterevidence').scrollIntoView({block:'center'})")
+        assert client.evaluate("document.querySelector('#counterevidence').textContent.trim().length>0"), "Counterevidence missing"
+
 
 def capture(client, filename, caption, entries):
     # Page screenshots include rendered content only, without browser UI.
@@ -68,7 +82,7 @@ def main():
             select(client, incident_id)
             analyze(client)
             quote(client, 1 if incident_id == "INC-A-002" else 0)
-            client.evaluate("window.scrollTo(0,0)")
+            frame_case_result(client, incident_id)
             capture(client, filename, caption, entries)
 
         select(client, "INC-A-002")
@@ -111,10 +125,15 @@ def main():
         client.evaluate("document.querySelector('#workspace').scrollIntoView({block:'start'})")
         capture(client, "09-mobile-workspace.png", "모바일 화면: 사건·근거·분석이 세로로 배치되며 가로 넘침을 확인합니다.", entries)
         assert not entries[-1]["overflow"], "Mobile horizontal overflow"
+        client.evaluate("document.querySelector('#task-cases').click();window.scrollTo(0,0)")
+        assert client.evaluate("(()=>{const h=document.querySelector('.header-title h1'),r=h.getBoundingClientRect(),s=getComputedStyle(h);return r.top>=0&&r.bottom<=innerHeight&&r.height<=parseFloat(s.lineHeight)+2&&document.querySelector('#session-button').getBoundingClientRect().top<innerHeight&&document.querySelector('.incident-card').getBoundingClientRect().top<innerHeight})()"), "Mobile title or selection controls not visible"
+        assert client.evaluate("document.querySelector('#profile-select').selectedOptions[0].textContent.includes('검토자')"), "Mobile profile label is not localized"
+        capture(client, "10-mobile-top-selection.png", "모바일 상단: 한 줄 한국어 제목, 데모 역할 선택, 사건 큐와 작업 탭입니다.", entries)
+        assert not entries[-1]["overflow"], "Mobile top horizontal overflow"
         desktop(client)
         client.evaluate("window.scrollTo(0,0)")
         (GALLERY / "baseline-capture.json").write_text(json.dumps({"real_browser":True,"synthetic":True,"real_model_requests":0,"screenshots":entries},ensure_ascii=False,indent=2),encoding="utf-8")
-        print("PASS: 9 actual UI screenshots; baseline-only; mobile overflow false.", flush=True)
+        print("PASS: 10 actual UI screenshots; baseline-only; mobile overflow false.", flush=True)
     finally:
         client.socket.close()
 

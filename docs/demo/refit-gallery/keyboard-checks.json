@@ -49,7 +49,7 @@
   "screenshots": [
     {
       "file": "desktop-queue-selection.png",
-      "sha256": "efe08584023e725619127ff92f2f29c68250b6e79b14c4d3381132444e8f9b3e",
+      "sha256": "f7680f942fd9abe27e95c47fed29f84e735b9fc756a2ebc63d352a3e395d7c5e",
       "actual_ui": true,
       "incident": "INC-A-002",
       "principal": "사이트 A / 검토자",
@@ -67,7 +67,7 @@
     },
     {
       "file": "mobile-queue-selection.png",
-      "sha256": "ca2c3f901b50981bde7173b4f7c8d85f274430889fad17a1bda912c14899fbe0",
+      "sha256": "42b6cb7559b01b56bc0f2617393c07b6dc117c815cebc90e078736ccc4d6ce31",
       "actual_ui": true,
       "incident": "INC-A-002",
       "principal": "사이트 A / 검토자",

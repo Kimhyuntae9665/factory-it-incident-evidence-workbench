@@ -12,19 +12,20 @@ Browser and synthetic JSON feed Python CPU retrieval and source validation. Opti
 
 ## 현재 화면: 사건부터 검토 기록까지
 
-P09 v2 개발 화면의 밝은 회색 바탕(`#f1f4f6`), 남색 본문(`#142635`), 선택 버튼(`#173f60`), 흰 근거·결과 카드와 회색 원문 블록을 적용했습니다. 화면 위에는 한 줄 한국어 제목과 역할·사건 선택을 두고, 아래 두 열에 원문과 결과를 나란히 표시합니다. 390px에서는 작업 탭으로 이동합니다. 이 화면은 합성 사건을 실제 Chrome에서 캡처했으며 **9장 모두 규칙 기준선, 모델 요청 0회**입니다.
+P09 v2 개발 화면의 밝은 회색 바탕(`#f1f4f6`), 남색 본문(`#142635`), 선택 버튼(`#173f60`), 흰 근거·결과 카드와 회색 원문 블록을 적용했습니다. 화면 위에는 한 줄 한국어 제목과 역할·사건 선택을 두고, 아래 두 열에 원문과 결과를 나란히 표시합니다. 390px에서는 작업 탭으로 이동합니다. 이 화면은 합성 사건을 실제 Chrome에서 캡처했으며 **10장 모두 규칙 기준선, 모델 요청 0회**입니다.
 
 | 순서 | 실제 화면 | 확인할 기능 |
 | --- | --- | --- |
 | 1 | ![정상 주문 조회와 두 열 근거 화면](docs/demo/refit-gallery/01-normal-baseline.png) | 사건 선택 · 정상 접수 근거 |
-| 2 | ![접속 주소 오류의 원문과 분석](docs/demo/refit-gallery/02-endpoint-mismatch.png) | 설정 주소와 기준 포트 대조 |
-| 3 | ![의존 서비스 단절 분석](docs/demo/refit-gallery/03-dependency-unavailable.png) | 연결 오류와 상태 조회 분리 |
-| 4 | ![응답 지연과 반증](docs/demo/refit-gallery/04-delay-counterevidence.png) | 지연 관측과 반증 |
+| 2 | ![설정 주소 19083과 기준 포트 19082가 함께 보이는 원문·관측 사실](docs/demo/refit-gallery/02-endpoint-mismatch.png) | 설정 주소와 기준 포트의 화면상 대조 |
+| 3 | ![연결 실패와 inactive 상태 관측 사실](docs/demo/refit-gallery/03-dependency-unavailable.png) | 연결 오류와 상태 조회 분리 |
+| 4 | ![지연 분석의 active 상태와 전체 단절 가설의 반증](docs/demo/refit-gallery/04-delay-counterevidence.png) | 지연 관측과 반증 |
 | 5 | ![현재 개정 원문 인용 강조](docs/demo/refit-gallery/05-original-quote-validation.png) | 정확한 부분 문자열·개정 대조 |
 | 6 | ![검토 결정과 감사 이력](docs/demo/refit-gallery/06-review-and-audit.png) | 사람 검토 기록 · 감사 이력 |
 | 7 | ![운영 담당의 제한된 근거 범위](docs/demo/refit-gallery/07-operator-evidence-scope.png) | 역할별 근거·승인 제한 |
 | 8 | ![운영 담당의 중립 검토 표시](docs/demo/refit-gallery/08-operator-neutral-review.png) | 비공개 결정 중립 표시 |
 | 9 | ![390px 모바일 원문 작업 탭](docs/demo/refit-gallery/09-mobile-workspace.png) | 모바일 원문 · 가로 넘침 없음 |
+| 10 | ![390px 모바일 상단의 한 줄 제목과 역할·사건 선택](docs/demo/refit-gallery/10-mobile-top-selection.png) | 모바일 제목 · 역할·사건 조작부 |
 
 [현재 캡처 조건과 파일별 해시](docs/demo/refit-gallery/README.md). 본문·조작부는 16px, 밀집한 원문·메타데이터는 14px 이상을 목표로 합니다. 만료 세션과 실제 권한 거절을 구분하고, 키보드 사건 선택·포커스 복귀·reduced-motion 이동을 유지합니다. 이 검사는 완전한 접근성 인증이 아닙니다.
 

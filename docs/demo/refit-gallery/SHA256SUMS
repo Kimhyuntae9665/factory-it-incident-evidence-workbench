@@ -1,9 +1,10 @@
-59b4d3b8240b4aac54a03f302876359ae9d9228ce19d59d2d4af40c23dd6e6e2  docs/demo/refit-gallery/01-normal-baseline.png
-dd50bf6489e2ef1322fe185a5d7294f1d0bc07a1159f85fdd276308294921482  docs/demo/refit-gallery/02-endpoint-mismatch.png
-49e8e264cd2aaab1f2475343bd23ca38387a50f85c1ea989b7fae88d69c0a7e2  docs/demo/refit-gallery/03-dependency-unavailable.png
-85b27a7ac4c2215d16b325c3d59f7cbbebc1ff13162c3268a224f9e44253fb16  docs/demo/refit-gallery/04-delay-counterevidence.png
+3c8f08fa8e745f67e343ba5efd18eb44b16a1cbbfbf394cac3b11721e3d507d8  docs/demo/refit-gallery/01-normal-baseline.png
+52981b0f8108c6f78b4720e4fb9d016cf669280073802aa25c56cb44a0e7faac  docs/demo/refit-gallery/02-endpoint-mismatch.png
+eac6e8c50144907aa92c5fc555172c6298960568587e01374f9a2611ca75ae99  docs/demo/refit-gallery/03-dependency-unavailable.png
+a6a9432092727716fbb88aec5b9e5e4d25e682d19e4540345f45293519dce074  docs/demo/refit-gallery/04-delay-counterevidence.png
 796a3926a5275dff4a1f2a24963dc087e2f8a0c25ed72eb015242014b01142f7  docs/demo/refit-gallery/05-original-quote-validation.png
 947c54e6bdf8f30f36d722323ef00808f6b6b868ea35a456d05251980aec2e03  docs/demo/refit-gallery/06-review-and-audit.png
-b9df10dfce959799221e54666d1c46f3ce1057f020273386286ac8f2e32037f9  docs/demo/refit-gallery/07-operator-evidence-scope.png
+16204fcc817be91b9a849911ba142023014c6567d0af4afe4b17c6c68fbf35e8  docs/demo/refit-gallery/07-operator-evidence-scope.png
 875799ead55d8414293c77ae825001b876343317930e9ef23e7499c1839ddc57  docs/demo/refit-gallery/08-operator-neutral-review.png
 9f5b5dabdbfb3e9fd7451d7f139d5ae0db1f100a991d2208ca2d5cbb12033c33  docs/demo/refit-gallery/09-mobile-workspace.png
+cdf6bf8fec7b14781c44aa796ecba5011aa846fc3f0fdbc698e0d19941684d85  docs/demo/refit-gallery/10-mobile-top-selection.png

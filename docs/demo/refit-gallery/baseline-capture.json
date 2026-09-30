@@ -137,6 +137,21 @@
         "height": 1100
       },
       "overflow": false
+    },
+    {
+      "file": "10-mobile-top-selection.png",
+      "caption": "모바일 상단: 한 줄 한국어 제목, 데모 역할 선택, 사건 큐와 작업 탭입니다.",
+      "actual_ui": true,
+      "synthetic": true,
+      "incident": "INC-A-004",
+      "profile": "사이트 A / 검토자",
+      "mode": "규칙 기준선 · 추론 없음",
+      "gate": "인용·추출 검사 통과 · 사람 검토 필요",
+      "viewport": {
+        "width": 390,
+        "height": 1100
+      },
+      "overflow": false
     }
   ]
 }

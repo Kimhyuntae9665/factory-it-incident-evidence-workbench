@@ -422,7 +422,7 @@
       state.profiles = asArray(data.profiles);
       $("profile-select").replaceChildren();
       state.profiles.forEach(profile => {
-        const option = node("option", "", string(profile.label, "사이트 " + profile.site + " / " + (roleLabels[profile.role] || profile.role)));
+        const option = node("option", "", "사이트 " + string(profile.site) + " / " + (roleLabels[profile.role] || string(profile.role)) + " · 합성 데모");
         option.value = profile.id;
         $("profile-select").append(option);
       });

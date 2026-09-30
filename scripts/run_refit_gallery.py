@@ -4,6 +4,7 @@ import socket
 import subprocess
 import sys
 import time
+import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "artifacts" / "refit-capture"
@@ -30,7 +31,7 @@ def main():
     try:
         with (RAW / "server.log").open("wb") as server_log, (RAW / "chrome.log").open("wb") as chrome_log:
             server = subprocess.Popen(
-                [sys.executable, "-m", "workbench.server", "--port", "19101", "--db", str(RAW / "gallery-final.sqlite3")],
+                [sys.executable, "-m", "workbench.server", "--port", "19101", "--db", str(RAW / ("gallery-" + uuid.uuid4().hex + ".sqlite3"))],
                 cwd=ROOT, stdin=subprocess.DEVNULL, stdout=server_log, stderr=subprocess.STDOUT, start_new_session=True)
             processes.append(server)
             wait_port(19101, server)
