@@ -5,7 +5,7 @@ from scripts import browser_smoke
 ROOT=Path(__file__).resolve().parents[1]
 FRAMES=ROOT/"artifacts/demo-live-frames"
 def main():
- FRAMES.mkdir(exist_ok=False)
+ FRAMES.mkdir(parents=True,exist_ok=False)
  metadata=[]
  original=browser_smoke.CDP.receive
  def receive(self):
