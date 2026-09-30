@@ -468,6 +468,9 @@
   }
   async function selectIncident(incident, initial = false) {
     if (state.busy || (state.loading && !initial)) return;
+    const origin = document.activeElement;
+    const restoreQueueFocus = !initial && origin?.classList.contains("incident-card") &&
+      origin.querySelector(".card-top span")?.textContent === incident.id;
     cancelReads();
     const version = ++state.version;
     state.documentVersion += 1;
@@ -515,7 +518,18 @@
         renderDocument(state.document);
       }
     } catch (error) { if (version === state.version) showError(error); }
-    finally { if (version === state.version) { state.loading = false; renderIncidents(); syncControls(); } }
+    finally {
+      if (version === state.version) {
+        state.loading = false;
+        renderIncidents();
+        syncControls();
+        if (restoreQueueFocus && state.incident?.id === incident.id && document.activeElement === document.body) {
+          const selected = $("incident-list").querySelector(".incident-card.selected");
+          if (selected?.getClientRects().length) selected.focus({ preventScroll: true });
+          else if ($("incident-title").getClientRects().length) moveTo($("incident-title"), "nearest");
+        }
+      }
+    }
   }
   async function searchEvidence(event) {
     event.preventDefault();

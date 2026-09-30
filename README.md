@@ -246,3 +246,7 @@ Qwen 모델은 제3자 구성 요소입니다. 해당 공식 모델 카드는 Ap
 ## Candidate keyboard return
 
 [Actual native Tab/Enter before/after evidence](docs/keyboard-candidate.md) documents the selected-candidate return fix on desktop and390px mobile. Two after layout cases/17 assertions, original citation validation/return, and the existing50 engineering tests pass with zero model requests. Candidate identity is restored within the current authorized source list; extraction, source selection and review rules are unchanged.
+
+## Incident queue keyboard selection
+
+[Actual incident-queue Tab/Enter evidence](docs/keyboard-queue.md) records a separate fix: completed selection restores the desktop queue row or visible mobile incident title. The delayed real source-read check preserves a later explicit focus choice. Two layout cases/19 after assertions, the existing candidate17 assertions and50 engineering tests pass with zero model requests.
