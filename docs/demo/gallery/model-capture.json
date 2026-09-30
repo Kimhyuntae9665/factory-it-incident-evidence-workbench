@@ -1,0 +1,22 @@
+{
+  "real_browser": true,
+  "synthetic": true,
+  "real_model_requests": 1,
+  "screenshots": [
+    {
+      "file": "10-real-model-extraction.png",
+      "caption": "실제 로컬 모델의 정형 관측 추출. 원인 가설은 잠정 규칙 결과이며 독립 진단 평가가 아닙니다.",
+      "actual_ui": true,
+      "synthetic": true,
+      "incident": "INC-A-002",
+      "profile": "사이트 A / 검토자",
+      "mode": "실제 모델 추출 + 관측 규칙 · Ollama",
+      "gate": "인용·추출 검사 통과 · 사람 검토 필요",
+      "viewport": {
+        "width": 1440,
+        "height": 1080
+      },
+      "overflow": false
+    }
+  ]
+}

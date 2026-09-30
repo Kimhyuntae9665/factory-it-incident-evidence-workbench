@@ -76,21 +76,27 @@ Review:
 
 ## 공유 추론 lease의 범위
 
-같은 ax-lab 실행 환경에서 GPU를 사용할 때는 **추론 자원 점유 lease만 공유**할 수 있습니다. 현재 01 모델 client는 프로젝트 두 단계 위 ax-lab 영역의 `inference.lock`을 사용해 겹치는 협력 요청을 거절하고, 프로세스 내부 lock으로 같은 앱의 중복 추론도 차단합니다. 일반 실행 구조는 다음과 같습니다.
+같은 GPU를 사용하는 협력 요청은 **추론 자원 점유 lease만 공유**할 수 있습니다. 기본 경로는 실행 사용자의 `~/.cache/ax-lab/runtime/inference.lock`입니다. 저장소 checkout 깊이나 01·02 프로젝트 디렉터리에 의존하지 않습니다. 두 프로젝트를 같은 사용자로 실행하면 같은 기본 lease를 사용합니다.
+
+명시적으로 경로를 정할 때는 두 프로세스에 동일한 절대 경로의 `AX_LAB_INFERENCE_LOCK`을 설정해야 합니다. 상대 경로, 펼쳐지지 않은 `~/...`, 빈 값은 거절합니다. 설정은 client를 불러올 때 선택되므로 이미 실행 중인 프로세스에는 owned app 재시작 후 적용됩니다.
 
 ```text
-ax-lab/
-  inference.lock
-  projects/
-    01-incident-evidence-workbench/
-    02-sop-.../
+user home/
+  .cache/
+    ax-lab/
+      runtime/
+        inference.lock
 ```
 
-이는 데이터 저장소나 인증 상태의 공유가 아닙니다. 공통 lease에는 원문, 사용자 정보, session 값, 승인 상태 또는 정답을 넣지 않습니다. 02가 실제 모델 경로를 추가한다면 같은 자원에 대해 lease를 준수해야 하며, 독립 prompt/schema/timeout 예산을 유지합니다.
+현재 01 client는 누락된 부모 디렉터리를 최대 세 단계까지 각각 mode 0700으로 생성합니다. 최종 부모는 현재 사용자가 소유한 private 디렉터리여야 하며 기존 디렉터리 권한을 자동 변경하지 않습니다. lock 파일은 사용자 소유 regular file, mode 0600입니다. 부모와 파일의 마지막 symlink를 거절하고 열린 directory descriptor를 기준으로 파일을 엽니다. 경로·권한 실패 시 네트워크 요청 전에 실패합니다. 기존 nonblocking `fcntl.flock`, 프로세스 내부 single-flight lock과 timeout disabled latch는 유지합니다.
 
-현재 lease는 이 규약을 따르는 요청 사이의 협력 경계입니다. 임의의 다른 GPU 작업을 중단하거나 모든 시스템 추론을 통제하지 않습니다. 01 timeout 후의 disabled latch는 01 프로세스 상태입니다. 해당 요청이 끝났는지 확인하고 프로젝트 프로세스만 복구하며, 다른 프로젝트나 Ollama 작업을 임의로 종료하지 않습니다.
+이는 데이터나 인증 상태의 공유가 아닙니다. lease에는 원문, 사용자 정보, session 값, 승인 상태 또는 정답을 기록하지 않습니다. 02가 실제 모델 경로를 추가할 때는 01의 `workbench/llm.py::_configured_inference_lock`, `_open_inference_lease`와 `request_json`의 acquisition/finally-close 패턴을 별도 client에 복사해 동일한 자원 정책을 적용할 수 있습니다. 01의 도메인 추출기·DB·세션을 import하지 않고 SOP prompt/schema와 독립 예산을 유지합니다.
 
-두 프로젝트가 동시에 단독 저장소로 실행될 경우에도 file lock 경로와 디렉터리 구조의 의미를 먼저 확인해야 합니다. 공유 자원 정책을 위해 시스템 전역 설정이나 모델 설정을 자동 변경하지 않습니다.
+이 lease는 규약을 따르는 요청 사이의 협력 경계입니다. 임의의 다른 GPU 작업을 중단하거나 모든 시스템 추론을 통제하지 않습니다. timeout 후 disabled latch는 각 프로젝트 프로세스 상태입니다. 해당 owned 요청이 끝났는지 확인하고 owned app만 복구하며, 다른 프로젝트나 Ollama 작업을 임의로 종료하지 않습니다.
+
+기존 checkout-relative `ax-lab/inference.lock`에서 새 경로로 바꿀 때는 **기존 lease와 모델 요청이 모두 idle인 것을 먼저 확인**해야 합니다. 이후 두 프로젝트의 owned app을 같은 새 경로 설정으로 재시작합니다. 서로 다른 경로를 사용하는 client를 동시에 실행하거나 lock 파일 삭제로 active lease를 우회하면 안 됩니다. 시스템 전역 설정, 인증 또는 모델 설정은 변경하지 않습니다. 파일은 남아 있어도 descriptor가 닫히면 OS lease는 해제됩니다.
+
+01의 clone 깊이 독립 경로, private 생성, 절대 경로 설정, 상대 경로·권한·symlink 실패, cross-process 경쟁은 임시 lease와 mocked network를 사용해 검사합니다. 테스트는 새 runtime lease를 취득하거나 live migration을 실행하지 않습니다. 02를 복사·실행하여 공유 lease를 검증한 결과라는 뜻은 아닙니다. 실제 동시 사용 전에 두 client의 절대 경로 일치와 cross-process 거절을 별도로 확인해야 합니다.
 
 ## n8n과의 관계
 

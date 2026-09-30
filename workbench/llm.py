@@ -1,11 +1,75 @@
 """Bounded single-flight localhost Ollama client. No tools or server mutation."""
-import json,time,threading,urllib.request,urllib.error,uuid,fcntl,os
+import json,time,threading,urllib.request,urllib.error,uuid,fcntl,os,stat
 from pathlib import Path
 MODEL="qwen3:4b"
 BASE="http://127.0.0.1:11434"
 _lock=threading.Lock()
 _disabled_reason=None
-INFERENCE_LOCK=Path(__file__).resolve().parents[3]/"inference.lock"
+def _configured_inference_lock(environ=None, home=None):
+    """Both project clients use the same user-owned lease, never clone ancestry."""
+    environ = os.environ if environ is None else environ
+    configured = environ.get("AX_LAB_INFERENCE_LOCK")
+    if configured is not None:
+        if not isinstance(configured, str) or not configured or "\x00" in configured:
+            raise RuntimeError("inference_lock_configuration_invalid")
+        path = Path(configured)
+        if not path.is_absolute():
+            raise RuntimeError("inference_lock_configuration_invalid")
+        return path
+    user_home = Path.home() if home is None else Path(home)
+    if not user_home.is_absolute():
+        raise RuntimeError("inference_lock_configuration_invalid")
+    return user_home / ".cache" / "ax-lab" / "runtime" / "inference.lock"
+
+
+INFERENCE_LOCK = _configured_inference_lock()
+MAX_LOCK_PARENT_CREATION = 3
+
+
+def _open_inference_lease():
+    """Create at most three private directories and open a safe shared lock."""
+    path = Path(INFERENCE_LOCK)
+    if not path.is_absolute():
+        raise RuntimeError("inference_lock_configuration_invalid")
+    fd = None
+    directory_fd = None
+    try:
+        missing = []
+        parent = path.parent
+        cursor = parent
+        while not cursor.exists():
+            missing.append(cursor)
+            if len(missing) > MAX_LOCK_PARENT_CREATION:
+                raise OSError("too_many_missing_lock_parents")
+            cursor = cursor.parent
+        for directory in reversed(missing):
+            try:
+                directory.mkdir(mode=0o700)
+            except FileExistsError:
+                if not directory.is_dir():
+                    raise
+        directory_fd = os.open(str(parent), os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+        metadata = os.fstat(directory_fd)
+        if (not stat.S_ISDIR(metadata.st_mode) or metadata.st_uid != os.geteuid()
+                or stat.S_IMODE(metadata.st_mode) & 0o077):
+            raise OSError("unsafe_lock_directory")
+        fd = os.open(path.name, os.O_WRONLY | os.O_CREAT | os.O_NOFOLLOW | os.O_CLOEXEC | os.O_NONBLOCK,
+                     0o600, dir_fd=directory_fd)
+        metadata = os.fstat(fd)
+        if not stat.S_ISREG(metadata.st_mode) or metadata.st_uid != os.geteuid():
+            raise OSError("unsafe_lock_file")
+        os.fchmod(fd, 0o600)
+        lease = os.fdopen(fd, "a")
+        fd = None
+        return lease
+    except (OSError, ValueError):
+        raise RuntimeError("inference_lock_unavailable") from None
+    finally:
+        if fd is not None:
+            os.close(fd)
+        if directory_fd is not None:
+            os.close(directory_fd)
+
 def _schema(ids,quotes=None):
     item={"type":"object","properties":{"text":{"type":"string","maxLength":100},"source_ids":{"type":"array","items":{"type":"string","enum":ids}}},"required":["text","source_ids"],"additionalProperties":False}
     return {"type":"object","properties":{
@@ -23,8 +87,7 @@ def request_json(messages,schema,num_predict=512,timeout=60):
     started=time.monotonic()
     lease=None
     try:
-        fd=os.open(str(INFERENCE_LOCK),os.O_WRONLY|os.O_CREAT|os.O_NOFOLLOW,0o600)
-        lease=os.fdopen(fd,"a")
+        lease=_open_inference_lease()
         try:fcntl.flock(lease.fileno(),fcntl.LOCK_EX|fcntl.LOCK_NB)
         except BlockingIOError as error:raise RuntimeError("inference_busy") from error
         payload={"model":MODEL,"messages":messages,"format":schema,"stream":False,"think":False,"truncate":False,"shift":False,"keep_alive":"30s","options":{"num_ctx":4096,"num_predict":num_predict,"temperature":0,"seed":42}}

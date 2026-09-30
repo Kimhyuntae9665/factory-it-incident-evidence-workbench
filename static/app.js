@@ -313,7 +313,7 @@
     $("review-existing").hidden = !analysis.review;
     if (analysis.review) {
       const review = analysis.review;
-      $("review-existing").replaceChildren(node("strong", "", (review.decision === "approved" ? "승인 기록됨" : "반려 기록됨") + " · " + date(review.timestamp)));
+      $("review-existing").replaceChildren(node("strong", "", (review.decision === "approved" ? "승인 기록됨" : review.decision === "rejected" ? "반려 기록됨" : "검토 기록 있음") + " · " + date(review.timestamp)));
       if (review.comment) $("review-existing").append(node("p", "", review.comment));
       if (review.reviewer_id || review.actor_id) $("review-existing").append(node("p", "tiny muted", "검토자 " + (review.reviewer_id || review.actor_id)));
       $("review-explanation").textContent = "이 분석에는 검토 결정이 이미 기록되어 있습니다. 같은 분석의 결정은 중복 생성되지 않습니다.";
@@ -336,7 +336,7 @@
       detail.append(node("p", "", parts.filter(Boolean).join(" · ")));
       if (event.comment) detail.append(node("p", "", event.comment));
       item.append(node("time", "", date(event.timestamp)), detail);
-      if (event.decision) item.append(badge(event.decision === "approved" ? "승인" : "반려"));
+      if (event.decision) item.append(badge(event.decision === "approved" ? "승인" : event.decision === "rejected" ? "반려" : "검토 기록"));
       else if (event.analysis_id) {
         const button = node("button", "text-button", "분석 열기 ↗");
         button.type = "button";
