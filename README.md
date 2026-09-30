@@ -1,5 +1,11 @@
 # TRACE — Factory IT Incident Evidence Workbench
 
+![CPU application and optional local model architecture](docs/architecture.png)
+
+[Editable SVG](docs/architecture.svg) · [Architecture provenance](docs/architecture-provenance.md)
+
+Browser and synthetic JSON feed Python CPU retrieval and source validation. Optional serial Ollama/Qwen extraction returns to the validation gate; human review and audit persist in SQLite.
+
 **한국어 장애 접수에서 원문 근거, 관측 사실, 잠정 가설, 사람의 검토 기록까지 이어지는 로컬 작업 공간입니다.**
 
 합성 데이터로 기업 업무 흐름을 재현하는 엔지니어링 테스트입니다. 실제 공장·MES·OT 시스템에 연결하지 않으며, 실제 공장 ROI나 MTTR 개선 효과를 검증한 프로젝트가 아닙니다.
