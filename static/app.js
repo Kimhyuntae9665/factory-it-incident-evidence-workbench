@@ -106,7 +106,11 @@
     if (focus) element.focus({preventScroll: true});
   }
   function returnToClaim() {
-    const target = state.returnFocus;
+    let target = state.returnFocus;
+    if (target && !target.isConnected && target.classList.contains("evidence-card")) {
+      const documentId = target.dataset.documentId;
+      target = documentId ? Array.from($("evidence-list").querySelectorAll(".evidence-card")).find(button => button.dataset.documentId === documentId) || null : null;
+    }
     setTask(target && target.closest(".analysis-pane") ? "review" : "sources");
     if (target && target.isConnected) {
       if (target.closest(".source-picker")) target.closest(".source-picker").open = true;
@@ -254,6 +258,7 @@
     state.documents.forEach(document => {
       const button = node("button", "evidence-card" + (state.document && state.document.id === document.id ? " selected" : ""));
       button.type = "button";
+      button.dataset.documentId = document.id;
       button.setAttribute("aria-pressed", String(!!state.document && state.document.id === document.id));
       const top = node("div", "evidence-card-top");
       top.append(node("span", "", kindLabels[document.kind] || string(document.kind)), node("span", "", "rev." + string(document.revision)));

@@ -242,3 +242,7 @@ n8n 갤러리 패턴의 출처와 실행하지 않은 연동 범위는 [n8n adap
 Qwen 모델은 제3자 구성 요소입니다. 해당 공식 모델 카드는 Apache-2.0을 명시하며, 모델 가중치는 저장소에 포함하지 않습니다. Ollama와 링크된 연구·템플릿·향후 데이터셋은 각각의 원저작자 라이선스를 따릅니다. MIT 표기가 제3자 자료의 라이선스를 덮어쓰지 않습니다.
 
 실행 후 생성되는 DB, 브라우저 프로필, 모델 요청/응답 trace와 평가 정답은 기본 Git 제외 대상입니다. 사용자가 실제 자료로 바꿨다면 게시 전에 별도의 민감정보·라이선스 검토가 필요합니다.
+
+## Candidate keyboard return
+
+[Actual native Tab/Enter before/after evidence](docs/keyboard-candidate.md) documents the selected-candidate return fix on desktop and390px mobile. Two after layout cases/17 assertions, original citation validation/return, and the existing50 engineering tests pass with zero model requests. Candidate identity is restored within the current authorized source list; extraction, source selection and review rules are unchanged.

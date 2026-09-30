@@ -1,0 +1,80 @@
+{
+  "phase": "after",
+  "actual_browser": true,
+  "synthetic": true,
+  "model_requests": 0,
+  "checks": [
+    "desktop native Enter opens candidate selector",
+    "desktop native Tab reaches second candidate",
+    "desktop native Enter opens intended latest accessible document",
+    "desktop native Tab reaches original-item return control",
+    "desktop return focuses exact originating selected candidate",
+    "desktop next native Tab continues candidate list from restored position",
+    "capture excludes authentication/private path",
+    "mobile native Enter opens candidate selector",
+    "mobile native Tab reaches second candidate",
+    "mobile native Enter opens intended latest accessible document",
+    "mobile native Tab reaches original-item return control",
+    "mobile return focuses exact originating selected candidate",
+    "mobile next native Tab continues candidate list from restored position",
+    "capture excludes authentication/private path",
+    "native mobile390 has no auto-shrink/page overflow",
+    "native citation Enter retains server-verified exact quote highlight",
+    "citation return retains original connected claim identity"
+  ],
+  "cases": [
+    {
+      "layout": "desktop",
+      "old_origin_connected": false,
+      "observed": {
+        "selected_title": "MES order API log",
+        "focus_tag": "BUTTON",
+        "focus_class": "evidence-card selected",
+        "focus_title": "MES order API log"
+      },
+      "passed": true
+    },
+    {
+      "layout": "mobile",
+      "old_origin_connected": false,
+      "observed": {
+        "selected_title": "MES order API log",
+        "focus_tag": "BUTTON",
+        "focus_class": "evidence-card selected",
+        "focus_title": "MES order API log"
+      },
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "desktop-candidate-return.png",
+      "sha256": "bd076d2729a05c6e1664a6f3fbd5be6b5372c8ff5f659504b4c00805c9a18c8e",
+      "actual_ui": true,
+      "css_width": 1440,
+      "scale": 1,
+      "overflow": false,
+      "focus": {
+        "id": "",
+        "tag": "BUTTON",
+        "class": "evidence-card selected",
+        "text": "LOGrev.2MES order API logSITE AIT 담당검토자"
+      }
+    },
+    {
+      "file": "mobile-candidate-return.png",
+      "sha256": "2776561c129414ac5de7601f7ca29080fb55381c152677864a48dfe83038077b",
+      "actual_ui": true,
+      "css_width": 390,
+      "scale": 1,
+      "overflow": false,
+      "focus": {
+        "id": "",
+        "tag": "BUTTON",
+        "class": "evidence-card selected",
+        "text": "LOGrev.2MES order API logSITE AIT 담당검토자"
+      }
+    }
+  ],
+  "passed": true
+}
