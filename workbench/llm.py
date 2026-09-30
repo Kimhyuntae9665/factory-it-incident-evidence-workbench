@@ -70,6 +70,41 @@ def _open_inference_lease():
         if directory_fd is not None:
             os.close(directory_fd)
 
+# An HTTP timeout does not prove server-side inference finished. Persist a
+# shared fail-closed barrier so another clone/project/process cannot retry.
+_timeout_guard_leases=[]
+def _timeout_marker():
+    return Path(str(INFERENCE_LOCK)+".blocked")
+
+def _check_timeout_barrier():
+    if os.path.lexists(_timeout_marker()):
+        raise RuntimeError("inference_blocked_after_timeout: verify owned request completion and explicitly recover the shared runtime")
+
+def _latch_timeout(lease):
+    global _disabled_reason
+    _disabled_reason="inference_disabled_after_timeout: verify owned request completion and explicitly recover the shared runtime"
+    directory_fd=None
+    fd=None
+    try:
+        directory_fd=os.open(str(Path(INFERENCE_LOCK).parent),os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+        metadata=os.fstat(directory_fd)
+        if metadata.st_uid!=os.geteuid() or stat.S_IMODE(metadata.st_mode)&0o077:
+            raise OSError("unsafe_timeout_directory")
+        try:
+            fd=os.open(_timeout_marker().name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC|os.O_NONBLOCK,0o600,dir_fd=directory_fd)
+        except FileExistsError:
+            return
+        os.write(fd,b"HTTP timeout: server completion unverified; manual shared-runtime recovery required.\n")
+        os.fsync(fd)
+    except OSError:
+        # Keep the OS lease held in this process if persistence is unavailable.
+        # Never pretend this fallback survives process termination.
+        _timeout_guard_leases.append(lease)
+        _disabled_reason += "; barrier_write_failed_keep_process_alive"
+    finally:
+        if fd is not None:os.close(fd)
+        if directory_fd is not None:os.close(directory_fd)
+
 def _schema(ids,quotes=None):
     item={"type":"object","properties":{"text":{"type":"string","maxLength":100},"source_ids":{"type":"array","items":{"type":"string","enum":ids}}},"required":["text","source_ids"],"additionalProperties":False}
     return {"type":"object","properties":{
@@ -90,20 +125,21 @@ def request_json(messages,schema,num_predict=512,timeout=60):
         lease=_open_inference_lease()
         try:fcntl.flock(lease.fileno(),fcntl.LOCK_EX|fcntl.LOCK_NB)
         except BlockingIOError as error:raise RuntimeError("inference_busy") from error
+        _check_timeout_barrier()
         payload={"model":MODEL,"messages":messages,"format":schema,"stream":False,"think":False,"truncate":False,"shift":False,"keep_alive":"30s","options":{"num_ctx":4096,"num_predict":num_predict,"temperature":0,"seed":42}}
         data=json.dumps(payload,ensure_ascii=False).encode()
         req=urllib.request.Request(BASE+"/api/chat",data=data,headers={"Content-Type":"application/json"})
         try:
             with urllib.request.urlopen(req,timeout=timeout) as response: raw=json.loads(response.read())
         except (TimeoutError,__import__("socket").timeout) as error:
-            _disabled_reason="inference_disabled_after_timeout: verify owned request finished before restarting this project process"
+            _latch_timeout(lease)
             raise TimeoutError(_disabled_reason) from error
         except urllib.error.HTTPError as error:
             detail=error.read(2000).decode(errors="replace")
             raise RuntimeError("ollama_http_%s: %s"%(error.code,detail)) from error
         except urllib.error.URLError as error:
             if isinstance(error.reason,(TimeoutError,__import__("socket").timeout)):
-                _disabled_reason="inference_disabled_after_timeout: verify owned request finished before restarting this project process"
+                _latch_timeout(lease)
                 raise TimeoutError(_disabled_reason) from error
             raise RuntimeError("ollama_unavailable: "+str(error.reason)) from error
         if not isinstance(raw,dict) or not isinstance(raw.get("message"),dict): raise RuntimeError("invalid_server_response")
@@ -121,7 +157,7 @@ def request_json(messages,schema,num_predict=512,timeout=60):
         metrics.update(latency_ms=round((time.monotonic()-started)*1000,2),model=MODEL,requested_think=False,thinking_chars=len(raw.get("message",{}).get("thinking","")),context_limit=4096,concurrency=1,trace_id=trace_id)
         return parsed,metrics,raw,payload
     finally:
-        if lease is not None:lease.close()
+        if lease is not None and lease not in _timeout_guard_leases:lease.close()
         _lock.release()
 def analyze_with_model(incident,documents,question):
     """MVP: model extracts typed observations; provisional causes come from rules."""

@@ -163,4 +163,34 @@ class ModelPolicyTests(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError,"inference_disabled"):llm.request_json([],{})
                 self.assertEqual(call.call_count,1)
         finally:llm._disabled_reason=original
+    def test_timeout_barrier_survives_restart_and_prevents_network(self):
+        import subprocess,sys
+        original=llm._disabled_reason;llm._disabled_reason=None
+        try:
+            with patch.object(llm.urllib.request,"urlopen",side_effect=TimeoutError("test")):
+                with self.assertRaises(TimeoutError):llm.request_json([],{})
+            marker=Path(str(llm.INFERENCE_LOCK)+".blocked")
+            self.assertTrue(marker.is_file())
+            self.assertEqual(stat.S_IMODE(marker.stat().st_mode),0o600)
+            package=llm.__package__
+            script=("from pathlib import Path; from unittest.mock import patch; "
+                    "from "+package+" import llm; import sys; llm.INFERENCE_LOCK=Path(sys.argv[1]); "
+                    "network=patch.object(llm.urllib.request,'urlopen'); call=network.start(); "
+                    "\ntry: llm.request_json([],{})"
+                    "\nexcept RuntimeError as error: assert str(error).startswith('inference_blocked_after_timeout')"
+                    "\nelse: raise AssertionError('restart bypassed timeout barrier')"
+                    "\nassert not call.called")
+            result=subprocess.run([sys.executable,"-c",script,str(llm.INFERENCE_LOCK)],capture_output=True,text=True,timeout=3)
+            self.assertEqual(result.returncode,0,result.stderr)
+        finally:llm._disabled_reason=original
+
+    def test_any_existing_timeout_marker_fails_closed_without_following(self):
+        target=self.lock_root/"unchanged"
+        target.write_text("not a runtime marker")
+        Path(str(llm.INFERENCE_LOCK)+".blocked").symlink_to(target)
+        with patch.object(llm.urllib.request,"urlopen") as call:
+            with self.assertRaisesRegex(RuntimeError,"inference_blocked_after_timeout"):llm.request_json([],{})
+        call.assert_not_called()
+        self.assertEqual(target.read_text(),"not a runtime marker")
+
 if __name__=="__main__":unittest.main()
