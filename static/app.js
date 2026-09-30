@@ -5,9 +5,11 @@
   const kindLabels = {log: "LOG", runbook: "RUNBOOK", trace: "TRACE"};
   const modeLabels = {baseline: "규칙 기준선 · 추론 없음", ollama: "실제 모델 추출 + 관측 규칙 · Ollama", mock: "모의 모델 · 테스트", degraded: "모델 실패 · 제한된 결과"};
   const statusLabels = {open: "진행 중", investigating: "조사 중", resolved: "해결됨", pending_review: "검토 대기", draft: "초안", ready: "검토 대기", completed: "분석 완료", degraded: "모델 실패", failed: "실패", approved: "승인됨", rejected: "반려됨", reviewed: "검토 완료", needs_review: "검토 대기"};
-  const state = {token: "", principal: null, profiles: [], incidents: [], incident: null, documents: [], document: null, analysis: null, events: [], busy: false, loading: false, searching: false, documentLoading: false, auditLoading: false, version: 0, documentVersion: 0, profileReady: false};
+  const state = {token: "", principal: null, profiles: [], incidents: [], incident: null, documents: [], document: null, analysis: null, events: [], busy: false, loading: false, searching: false, documentLoading: false, auditLoading: false, version: 0, documentVersion: 0, profileReady: false, returnFocus: null};
   const savedKey = "trace-demo-session-v1";
   const readRequests = new Set();
+  let sessionProbe = null;
+  let sessionProbeToken = "";
 
   function node(tag, className, text) {
     const result = document.createElement(tag);
@@ -62,6 +64,7 @@
     state.incident = null;
     state.documents = [];
     state.document = null;
+    state.returnFocus = null;
     state.analysis = null;
     state.events = [];
     persistSession();
@@ -71,26 +74,82 @@
     $("welcome").hidden = false;
   }
 
+  // Every valid profile can read incidents; use this safe read to distinguish a
+  // backend 403 caused by expired identity from a role/site authorization denial.
+  async function sessionIsValid(token) {
+    if (sessionProbe && sessionProbeToken === token) return sessionProbe;
+    sessionProbeToken = token;
+    const pending = (async () => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 10000);
+      try {
+        const response = await fetch("/api/incidents", {method:"GET", headers:{Accept:"application/json", Authorization:"Bearer " + token}, signal:controller.signal, credentials:"same-origin", cache:"no-store"});
+        if (response.ok) return true;
+        if (response.status === 401 || response.status === 403) return false;
+        return null;
+      } catch (_) { return null; }
+      finally { clearTimeout(timer); }
+    })();
+    sessionProbe = pending;
+    try { return await pending; }
+    finally { if (sessionProbe === pending) { sessionProbe = null; sessionProbeToken = ""; } }
+  }
+  function expiredSession(token) {
+    const error = new Error("데모 세션이 만료되었거나 유효하지 않습니다. 프로필을 선택하고 다시 접속해 주세요.");
+    error.status = 401;
+    if (state.token === token) { clearSession(); announce(error.message, "error"); }
+    return error;
+  }
+  function moveTo(element, block = "start", focus = true) {
+    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    element.scrollIntoView({behavior: reduced ? "auto" : "smooth", block});
+    if (focus) element.focus({preventScroll: true});
+  }
+  function returnToClaim() {
+    const target = state.returnFocus;
+    setTask(target && target.closest(".analysis-pane") ? "review" : "sources");
+    if (target && target.isConnected) {
+      if (target.closest(".source-picker")) target.closest(".source-picker").open = true;
+      moveTo(target, "center");
+    }
+    else {
+      setTask("sources");
+      const picker = document.querySelector(".source-picker");
+      picker.open = true;
+      moveTo(picker.querySelector("summary"), "nearest");
+    }
+  }
+  function setTask(task, focus = false) {
+    if (!["cases","sources","review"].includes(task)) return;
+    document.body.dataset.task = task;
+    document.querySelectorAll(".task-tabs button").forEach(button => {
+      const selected = button.dataset.task === task;
+      button.setAttribute("aria-selected", String(selected));
+      button.tabIndex = selected ? 0 : -1;
+      if (selected && focus) button.focus();
+    });
+  }
+
   async function api(path, {method = "GET", body, timeout = 15000, authenticated = true} = {}) {
     const controller = new AbortController();
     if (method === "GET") readRequests.add(controller);
     let timedOut = false;
     const timer = setTimeout(() => { timedOut = true; controller.abort(); }, timeout);
+    const requestToken = authenticated ? state.token : "";
     const headers = {"Accept": "application/json"};
     if (body !== undefined) headers["Content-Type"] = "application/json";
-    if (authenticated && state.token) headers.Authorization = "Bearer " + state.token;
+    if (requestToken) headers.Authorization = "Bearer " + requestToken;
     try {
       const response = await fetch(path, {method, headers, body: body === undefined ? undefined : JSON.stringify(body), signal: controller.signal, credentials: "same-origin", cache: "no-store"});
       let data;
       try { data = await response.json(); }
       catch (_) { throw new Error("서버 응답을 읽을 수 없습니다. 연결 상태를 확인해 주세요."); }
       if (!response.ok) {
-        if (response.status === 401 && authenticated) {
-          clearSession();
-          const error = new Error("데모 세션이 만료되었거나 유효하지 않습니다. 프로필로 다시 접속해 주세요.");
-          error.status = 401;
-          announce(error.message, "error");
-          throw error;
+        if (response.status === 401 && requestToken) throw expiredSession(requestToken);
+        if (response.status === 403 && requestToken) {
+          const valid = await sessionIsValid(requestToken);
+          if (valid === false) throw expiredSession(requestToken);
+          // Preserve identity for a true ACL denial or an uncertain validation read.
         }
         const messages = {400: "입력 내용을 확인해 주세요.", 403: "현재 사이트 또는 역할에서 허용되지 않은 작업입니다.", 404: "접근 가능한 최신 근거 또는 사건을 찾을 수 없습니다.", 409: "현재 분석 상태에서는 요청한 작업을 완료할 수 없습니다.", 413: "요청 내용이 너무 깁니다.", 429: "서버가 다른 요청을 처리하고 있습니다. 잠시 뒤 다시 확인해 주세요.", 503: "분석 서비스를 사용할 수 없습니다."};
         const error = new Error(messages[response.status] || "서버에서 요청을 처리하지 못했습니다.");
@@ -101,12 +160,12 @@
       return data;
     } catch (error) {
       if (timedOut) {
-        const wrapped = new Error(method === "GET" ? "응답 대기 시간이 초과되었습니다. 새로고침으로 다시 확인해 주세요." : "응답 대기 시간이 초과되었습니다. 서버 처리는 계속될 수 있습니다. 감사 이력을 확인한 뒤 새 실행 여부를 판단해 주세요.");
+        const wrapped = new Error(method === "GET" ? "근거·기록 조회 대기 시간이 초과되었습니다. 다시 조회해 주세요." : "응답 대기 시간이 초과되었습니다. 서버 처리는 계속될 수 있습니다. 감사 이력을 확인한 뒤 새 실행 여부를 판단해 주세요.");
         wrapped.timeout = true;
         throw wrapped;
       }
       if (error.name === "AbortError") throw error;
-      if (error instanceof TypeError) throw new Error("워크벤치에 연결할 수 없습니다. 연결 상태를 확인해 주세요.");
+      if (error instanceof TypeError) throw new Error(method === "GET" ? "근거·기록 조회에 실패했습니다. 연결 상태를 확인해 주세요." : "요청의 저장 결과를 확인할 수 없습니다. 연결 상태와 감사 이력을 확인해 주세요.");
       throw error;
     } finally {
       clearTimeout(timer);
@@ -202,7 +261,7 @@
       badges.append(badge("SITE " + string(document.site)));
       asArray(document.roles).forEach(role => badges.append(badge(roleLabels[role] || role)));
       button.append(top, node("strong", "", document.title), badges);
-      button.addEventListener("click", () => openDocument(document.id));
+      button.addEventListener("click", () => openDocument(document.id, "", undefined, button));
       list.append(button);
     });
     syncControls();
@@ -210,6 +269,7 @@
   function renderDocument(document, quote = "") {
     $("document-view").hidden = !document;
     $("document-empty").hidden = !!document;
+    $("return-claim").hidden = !document || !state.returnFocus;
     if (!document) return;
     $("document-kind").textContent = kindLabels[document.kind] || string(document.kind);
     $("document-revision").textContent = "rev." + string(document.revision);
@@ -251,7 +311,7 @@
           const button = node("button", "source-ref", id);
           button.type = "button";
           button.setAttribute("aria-label", String(id) + " 근거 원문 확인");
-          button.addEventListener("click", () => openDocument(id));
+          button.addEventListener("click", () => openDocument(id, "", undefined, button));
           refs.append(button);
         });
         if (!refs.children.length) refs.append(node("span", "tiny muted", "연결된 출처 없음"));
@@ -264,27 +324,30 @@
     const analysis = state.analysis;
     $("analysis-result").hidden = !analysis;
     $("analysis-empty").hidden = !!analysis || state.busy;
-    $("analysis-mode-badge").textContent = analysis ? (modeLabels[analysis.mode] || string(analysis.mode)) : "분석 대기";
+    const retrievalFailed = !!(analysis && analysis.metrics && analysis.metrics.failure_stage === "retrieval");
+    $("analysis-mode-badge").textContent = retrievalFailed ? "근거 검색 실패 · 분석 제한" : analysis ? (modeLabels[analysis.mode] || string(analysis.mode)) : "분석 대기";
     if (!analysis) { syncControls(); return; }
     $("analysis-mode-badge").style.color = analysis.mode === "degraded" ? "var(--red)" : analysis.mode === "ollama" ? "var(--amber)" : "var(--teal)";
     $("analysis-summary").textContent = string(analysis.summary, "요약이 없습니다.");
-    $("analysis-status").textContent = statusLabels[analysis.status] || string(analysis.status);
+    $("analysis-status").textContent = retrievalFailed ? "검색 실패" : analysis.review ? (analysis.review.decision === "approved" ? "승인됨" : analysis.review.decision === "rejected" ? "반려됨" : "검토 완료") : (statusLabels[analysis.status] || string(analysis.status));
     const metrics = analysis.metrics || {};
     const meta = [analysis.id];
     if (typeof metrics.duration_ms === "number") meta.push("처리 " + Math.round(metrics.duration_ms) + " ms");
     if (typeof metrics.latency_ms === "number") meta.push("처리 " + Math.round(metrics.latency_ms) + " ms");
     if (metrics.model) meta.push(String(metrics.model));
     if (metrics.model_task) meta.push("모델 역할: 정형 관측 추출");
+    if (metrics.retrieval_error_kind) meta.push("검색 실패 유형: " + String(metrics.retrieval_error_kind));
     if (metrics.model_error_kind) meta.push("실패 유형: "+String(metrics.model_error_kind));
     if (typeof metrics.total_ms === "number" && typeof metrics.latency_ms !== "number") meta.push("처리 "+Math.round(metrics.total_ms)+" ms");
     $("analysis-meta").textContent = meta.filter(Boolean).join(" / ");
     const passed = reviewable(analysis);
     $("gate").className = "gate " + (passed ? "passed" : "failed");
     $("gate-symbol").textContent = passed ? "✓" : "!";
-    $("gate-title").textContent = passed ? "인용·추출 검사 통과 · 사람 검토 필요" : "인용·추출 검사 미통과 · 승인 차단";
+    $("gate-title").textContent = passed ? (analysis.review ? "인용·추출 검사 통과 · 검토 기록 있음" : "인용·추출 검사 통과 · 사람 검토 필요") : "인용·추출 검사 미통과 · 승인 차단";
     const issues = $("gate-issues");
     issues.replaceChildren();
-    if (analysis.mode === "degraded" || ["failed", "error", "degraded"].includes(analysis.status)) issues.append(node("li", "", "모델 실행에 실패했거나 제한된 결과입니다. 이 분석은 승인할 수 없습니다."));
+    if (retrievalFailed) issues.append(node("li", "", "근거 검색에 실패하여 원문 관측을 확인할 수 없습니다. 모델 추출은 실행하지 않았으며 승인이 차단됩니다."));
+    else if (analysis.mode === "degraded" || ["failed", "error", "degraded"].includes(analysis.status)) issues.append(node("li", "", "모델 추출·검증에 실패했거나 제한된 결과입니다. 이 분석은 승인할 수 없습니다."));
     if (!analysis.gate || typeof analysis.gate.passed !== "boolean") issues.append(node("li", "", "인용·추출 검사 상태를 확인할 수 없습니다."));
     asArray(analysis.gate && analysis.gate.issues).forEach(issue => issues.append(node("li", "", typeof issue === "string" ? issue : JSON.stringify(issue))));
     if (passed) issues.append(node("li", "", "출처 권한·최신 개정·원문 일치·정형 관측 추출을 검사했습니다. 인과 진단과 의미적 지지는 사람이 확인해야 합니다."));
@@ -297,7 +360,7 @@
       const label = node("div", "citation-label");
       label.append(node("span", "", String(index + 1).padStart(2, "0")), node("span", "", string(citation.document_id) + " / rev." + string(citation.revision)), node("span", "", string(citation.title, "")));
       button.append(label, node("blockquote", "", string(citation.quote, "인용문 없음")));
-      button.addEventListener("click", () => openDocument(citation.document_id, citation.quote, citation.revision));
+      button.addEventListener("click", () => openDocument(citation.document_id, citation.quote, citation.revision, button));
       citations.append(button);
     });
     if (!asArray(analysis.citations).length) citations.append(node("p", "reasoning-empty", "인용된 원문이 없습니다."));
@@ -405,6 +468,8 @@
     state.documentVersion += 1;
     state.loading = true;
     state.incident = incident;
+    state.returnFocus = null;
+    setTask("sources");
     state.analysis = null;
     state.document = null;
     state.documents = [];
@@ -464,10 +529,11 @@
     } catch (error) { if (version === state.version) showError(error); }
     finally { state.searching = false; syncControls(); }
   }
-  async function openDocument(id, quote = "", expectedRevision) {
+  async function openDocument(id, quote = "", expectedRevision, origin = document.activeElement) {
     if (!id || state.documentLoading || state.loading) return;
     const version = state.version;
     const documentVersion = ++state.documentVersion;
+    state.returnFocus = origin && origin !== document.body ? origin : null;
     state.documentLoading = true;
     state.document = null;
     renderDocument(null);
@@ -488,7 +554,8 @@
         if (!citation || citation.document_id !== id || citation.quote !== quote || (expectedRevision !== undefined && citation.revision !== expectedRevision)) throw new Error("인용의 개정 또는 내용이 현재 근거와 일치하지 않습니다.");
         $("citation-check").textContent = "✓ 원문과 정확히 일치 · rev." + citation.revision;
       }
-      $("document-view").scrollIntoView({behavior: "smooth", block: "nearest"});
+      setTask("sources");
+      moveTo($("document-title"), "nearest");
     } catch (error) {
       if (version !== state.version || documentVersion !== state.documentVersion) return;
       if (quote && state.document && state.document.id === id) {
@@ -506,6 +573,7 @@
     const mode = document.querySelector('input[name="mode"]:checked').value;
     state.busy = true;
     state.analysis = null;
+    setTask("review");
     renderAnalysis();
     $("analysis-loading").hidden = false;
     $("analyze-button").firstElementChild.textContent = "분석 중…";
@@ -518,7 +586,8 @@
       if (!state.analysis || !state.analysis.id) throw new Error("분석 응답이 올바르지 않습니다.");
       $("review-comment").value = "";
       renderAnalysis();
-      announce(state.analysis.mode === "degraded" ? "모델 실행에 실패했습니다. 검증 사유와 미확인 사항을 확인하세요. 승인은 차단됩니다." : "분석이 기록되었습니다. 인용을 원문과 대조한 뒤 검토하세요.", state.analysis.mode === "degraded" ? "warn" : "");
+      const retrievalFailed = state.analysis.metrics && state.analysis.metrics.failure_stage === "retrieval";
+      announce(retrievalFailed ? "근거 검색에 실패했습니다. 모델 추출을 실행하지 않았고 승인은 차단됩니다." : state.analysis.mode === "degraded" ? "모델 추출·검증에 실패했습니다. 검증 사유와 미확인 사항을 확인하세요. 승인은 차단됩니다." : "분석이 기록되었습니다. 인용을 원문과 대조한 뒤 검토하세요.", retrievalFailed || state.analysis.mode === "degraded" ? "warn" : "");
       await refreshAudit(true);
     } catch (error) { if (version === state.version) { showError(error); if (error.timeout) await refreshAudit(true); } }
     finally {
@@ -543,7 +612,8 @@
       $("review-comment").value = "";
       renderAnalysis();
       announce("");
-      $("analysis-result").scrollIntoView({behavior: "smooth", block: "start"});
+      setTask("review");
+      moveTo($("analysis-result"), "start");
     } catch (error) { if (version === state.version) showError(error); }
     finally { state.loading = false; syncControls(); }
   }
@@ -582,13 +652,32 @@
         if (error.timeout) {
           try {
             const data = await api("/api/analyses/" + encodeURIComponent(analysisId));
-            if (version === state.version) { state.analysis = data.analysis; renderAnalysis(); }
+            if (version === state.version) {
+              state.analysis = data.analysis; renderAnalysis();
+              announce(state.analysis && state.analysis.review ? "서버 조회에서 기존 검토 기록을 확인했습니다. 결정 요청을 다시 보내지 않았습니다." : "서버 조회에서 검토 기록을 아직 확인하지 못했습니다. 감사 이력을 확인한 뒤 재시도 여부를 판단해 주세요.", state.analysis && state.analysis.review ? "" : "warn");
+              await refreshAudit(true);
+            }
           } catch (_) { /* Never automatically repeat a mutation after timeout. */ }
         }
       }
     } finally { state.busy = false; renderAudit(); syncControls(); }
   }
 
+  document.querySelectorAll(".task-tabs button").forEach(button => {
+    button.addEventListener("click", () => setTask(button.dataset.task));
+    button.addEventListener("keydown", event => {
+      const tasks = ["cases", "sources", "review"];
+      const current = tasks.indexOf(button.dataset.task);
+      let next = current;
+      if (event.key === "ArrowRight") next = (current + 1) % tasks.length;
+      else if (event.key === "ArrowLeft") next = (current + 2) % tasks.length;
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = 2;
+      else return;
+      event.preventDefault(); setTask(tasks[next], true);
+    });
+  });
+  $("return-claim").addEventListener("click", returnToClaim);
   $("profile-select").addEventListener("change", syncControls);
   $("session-button").addEventListener("click", startSession);
   $("search-form").addEventListener("submit", searchEvidence);
